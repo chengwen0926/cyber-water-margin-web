@@ -1,0 +1,35 @@
+[
+  {
+    "rule_id": "penalty_single_day",
+    "threshold_type": "single_day_error_rate",
+    "threshold_value": 0.3,
+    "consecutive_days_required": null,
+    "penalty_action": {
+      "action_type": "warning",
+      "action_payload": null,
+      "severity": 1
+    }
+  },
+  {
+    "rule_id": "penalty_consecutive",
+    "threshold_type": "consecutive_days",
+    "threshold_value": 0.2,
+    "consecutive_days_required": 2,
+    "penalty_action": {
+      "action_type": "salary_deduction",
+      "action_payload": { "amount": 200 },
+      "severity": 2
+    }
+  },
+  {
+    "rule_id": "penalty_cumulative",
+    "threshold_type": "cumulative_strikes",
+    "threshold_value": 3,
+    "consecutive_days_required": null,
+    "penalty_action": {
+      "action_type": "boss_call_scripted",
+      "action_payload": { "chat_script_id": "boss_call_checkin_01" },
+      "severity": 3
+    }
+  }
+]

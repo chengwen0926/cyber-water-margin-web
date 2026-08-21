@@ -1,0 +1,18 @@
+[
+  {
+    "directive_id": "directive_secret_report_criminal",
+    "triggered_by_chat_script_id": "boss_call_directive_01",
+    "day_issued": 0,
+    "condition": {
+      "match_type": "medical_field_value",
+      "match_key": "criminal_record",
+      "match_value": "有犯罪记录"
+    },
+    "action": {
+      "action_type": "secret_report",
+      "action_payload": { "report_to": "boss" }
+    },
+    "covert": true,
+    "expires_day": null
+  }
+]

@@ -1,0 +1,39 @@
+{
+  "script_id": "npc_honest_intern_normal",
+  "participant": "npc",
+  "archetype_tags": ["intern", "honest", "normal"],
+  "start_node_id": "start",
+  "nodes": {
+    "start": {
+      "node_id": "start",
+      "speaker": "npc",
+      "text": "你好，我是来面试实习岗位的，请问需要我补充什么材料吗？",
+      "options": [
+        { "option_id": "ask_health", "text": "问一下你的健康状况", "next_node_id": "health" },
+        { "option_id": "ask_edu", "text": "问一下你的毕业时间", "next_node_id": "edu" }
+      ]
+    },
+    "health": {
+      "node_id": "health",
+      "speaker": "npc",
+      "text": "我身体一直很好，体检报告都是合格的，您可以去医疗库核实。",
+      "options": [
+        { "option_id": "continue", "text": "好的，谢谢配合。", "next_node_id": "end" }
+      ]
+    },
+    "edu": {
+      "node_id": "edu",
+      "speaker": "npc",
+      "text": "我是去年毕业的，学校和专业都写在简历里了。",
+      "options": [
+        { "option_id": "continue", "text": "好的，谢谢配合。", "next_node_id": "end" }
+      ]
+    },
+    "end": {
+      "node_id": "end",
+      "speaker": "npc",
+      "text": "谢谢，期待您的回复。",
+      "options": []
+    }
+  }
+}

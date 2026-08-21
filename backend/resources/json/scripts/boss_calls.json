@@ -1,0 +1,47 @@
+[
+  {
+    "script_id": "boss_call_checkin_01",
+    "participant": "boss",
+    "archetype_tags": ["boss"],
+    "start_node_id": "start",
+    "nodes": {
+      "start": {
+        "node_id": "start",
+        "speaker": "boss",
+        "text": "今天辛苦了，把该来的都查一遍，别放过任何一个隐瞒病史的。",
+        "options": [
+          { "option_id": "ack", "text": "明白，领导。", "next_node_id": "end" }
+        ]
+      },
+      "end": {
+        "node_id": "end",
+        "speaker": "boss",
+        "text": "嗯，去忙吧。",
+        "options": []
+      }
+    }
+  },
+  {
+    "script_id": "boss_call_directive_01",
+    "participant": "boss",
+    "archetype_tags": ["boss"],
+    "start_node_id": "start",
+    "nodes": {
+      "start": {
+        "node_id": "start",
+        "speaker": "boss",
+        "text": "跟你说个事，最近有人隐瞒犯罪记录混进来面试。你要是发现了，别声张，悄悄报给我。",
+        "options": [
+          { "option_id": "ack", "text": "我知道了。", "next_node_id": "reveal" }
+        ]
+      },
+      "reveal": {
+        "node_id": "reveal",
+        "speaker": "boss",
+        "text": "好，就这样，挂了。",
+        "options": [],
+        "reveals_directive": "directive_secret_report_criminal"
+      }
+    }
+  }
+]

@@ -1,0 +1,21 @@
+{
+  "day": 3,
+  "npc_count": 3,
+  "allowed_npc_levels": ["intern", "staff"],
+  "review_rules": [
+    {
+      "rule_id": "rule_day3_gender",
+      "field_key": "gender",
+      "check_type": "must_match_medical",
+      "description": "今日需核验候选人性别信息是否属实",
+      "severity": "reject_if_violated"
+    },
+    {
+      "rule_id": "rule_day3_health",
+      "field_key": "health_status",
+      "check_type": "must_match_medical",
+      "description": "今日需核验所有候选人的健康状况是否如实填写",
+      "severity": "flag_only"
+    }
+  ]
+}

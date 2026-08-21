@@ -1,0 +1,21 @@
+{
+  "day": 2,
+  "npc_count": 3,
+  "allowed_npc_levels": ["intern", "staff", "senior"],
+  "review_rules": [
+    {
+      "rule_id": "rule_day2_prior",
+      "field_key": "prior_employment",
+      "check_type": "must_match_medical",
+      "description": "今日需核验候选人过往履历是否属实",
+      "severity": "reject_if_violated"
+    },
+    {
+      "rule_id": "rule_day2_marital",
+      "field_key": "marital_status",
+      "check_type": "must_match_medical",
+      "description": "今日需核验婚姻状况字段（仅记录不强制拒绝）",
+      "severity": "flag_only"
+    }
+  ]
+}

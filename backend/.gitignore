@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# runtime-generated data (seed configs like schedules/scripts/penalty_rules.json ARE committed)
+resources/json/cases/*.json
+resources/json/npc_profiles/*.json
+resources/json/queues/
+resources/json/directive_instances/
+resources/json/save.json
+resources/json/emails.json

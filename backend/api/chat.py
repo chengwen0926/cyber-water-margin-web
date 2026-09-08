@@ -4,9 +4,9 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
 from core.events import broadcaster
-from data import case_loader, npc_loader, queue_store, save_manager, script_loader
-from models.chat import ChatScript, DialogueNode
-from services import state_machine
+from data import case_loader, npc_loader, save_manager, script_loader
+from models.chat import ChatMessage, ChatScript, ChatSession, DialogueNode
+from services import chat_sessions, state_machine
 
 router = APIRouter(prefix="/api/chat", tags=["chat"])
 
@@ -62,32 +62,31 @@ def list_contacts() -> list[ChatContact]:
                 name="领导",
                 avatar="/avatars/boss.png",
                 kind="boss",
-                script_id=boss_scripts[0].script_id,
+                script_id=save.latest_boss_script_id or boss_scripts[0].script_id,
             )
         )
 
-    queue = queue_store.load(max(save.current_day, 1))
-    if queue is not None:
-        for entry in queue.entries:
-            try:
-                case = case_loader.load(entry.case_id)
-            except FileNotFoundError:
-                continue
-            if not case.resume.downloaded:
-                continue
-            try:
-                profile = npc_loader.load(case.npc_id)
-            except FileNotFoundError:
-                continue
-            contacts.append(
-                ChatContact(
-                    id=case.case_id,
-                    name=profile.npc_name,
-                    avatar=profile.avatar,
-                    kind="npc",
-                    script_id=case.chat_script_id,
-                )
+    # Keep every downloaded candidate available. Chat history is persistent
+    # across days, so limiting contacts to today's queue makes older
+    # conversations disappear from the read archive.
+    cases = sorted(
+        (case for case in case_loader.load_all() if case.resume.downloaded),
+        key=lambda case: case.case_id,
+    )
+    for case in cases:
+        try:
+            profile = npc_loader.load(case.npc_id)
+        except FileNotFoundError:
+            continue
+        contacts.append(
+            ChatContact(
+                id=case.case_id,
+                name=profile.npc_name,
+                avatar=profile.avatar,
+                kind="npc",
+                script_id=case.chat_script_id,
             )
+        )
     return contacts
 
 
@@ -134,3 +133,54 @@ def advance(script_id: str, body: AdvanceRequest) -> DialogueNode:
 
     save_manager.update(mutate)
     return next_node
+
+
+class SessionAdvanceRequest(BaseModel):
+    script_id: str
+    option_id: str
+    expected_node_id: str
+
+
+def _contact_script(contact_id: str, script_id: str) -> ChatScript:
+    contact = next((c for c in list_contacts() if c.id == contact_id), None)
+    if contact is None or contact.script_id != script_id:
+        raise HTTPException(status_code=404, detail="conversation not available")
+    return get_script(script_id)
+
+
+@router.get("/sessions/{contact_id}", response_model=ChatSession)
+def get_session(contact_id: str, script_id: str) -> ChatSession:
+    script = _contact_script(contact_id, script_id)
+    return chat_sessions.snapshot(save_manager.read(), contact_id, script)
+
+
+@router.post("/sessions/{contact_id}/advance", response_model=ChatSession)
+def advance_session(contact_id: str, body: SessionAdvanceRequest) -> ChatSession:
+    script = _contact_script(contact_id, body.script_id)
+    result = None
+
+    def mutate(save):
+        nonlocal result
+        session = chat_sessions.snapshot(save, contact_id, script)
+        current = session.current_node
+        if current.node_id != body.expected_node_id:
+            raise HTTPException(status_code=409, detail="conversation has advanced")
+        option = next((o for o in current.options if o.option_id == body.option_id), None)
+        if option is None:
+            raise HTTPException(status_code=400, detail="invalid option_id")
+        next_node = script.nodes.get(option.next_node_id)
+        if next_node is None:
+            raise HTTPException(status_code=400, detail="dangling next_node_id")
+        key = chat_sessions.session_key(contact_id, script.script_id, save.chat_call_revision if contact_id == "boss" else 0)
+        save.chat_transcripts[key] = [*session.messages,
+            ChatMessage(speaker="player", text=option.text),
+            ChatMessage(speaker=next_node.speaker, text=next_node.text)]
+        save.conversation_progress[key] = next_node.node_id
+        if next_node.reveals_clue and next_node.reveals_clue not in save.discovered_clues:
+            save.discovered_clues.append(next_node.reveals_clue)
+        if next_node.reveals_directive:
+            state_machine.materialize_directive(next_node.reveals_directive, save.current_day, save)
+        result = chat_sessions.snapshot(save, contact_id, script)
+
+    save_manager.update(mutate)
+    return result

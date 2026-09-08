@@ -77,7 +77,7 @@ button { color: inherit; }
 .pixel-icon--mac { width: 42px; height: 35px; background: #e4e4e4; border: 2px solid #111; border-radius: 12px 12px 4px 4px; box-shadow: 2px 2px 0 rgba(0,0,0,.5), inset 2px 2px 0 #fff; }
 .pixel-icon--mac:before { content: ''; position: absolute; left: 8px; top: 8px; width: 22px; height: 14px; background: #4463b4; border: 2px solid #111; }
 .pixel-icon--mac:after { content: ''; position: absolute; left: 13px; bottom: -8px; width: 14px; height: 7px; background: #c8c8c8; border: 2px solid #111; }
-.mac-window { position: absolute; min-width: 245px; min-height: 130px; background: var(--platinum); border: 2px solid #111; box-shadow: 4px 4px 0 rgba(0,0,0,.48); }
+.mac-window { position: absolute; min-width: min(245px, calc(100vw - 8px)); min-height: min(150px, calc(100vh - 33px)); pointer-events: auto; background: var(--platinum); border: 2px solid #111; box-shadow: 4px 4px 0 rgba(0,0,0,.48); }
 .mac-window--active { box-shadow: 4px 4px 0 rgba(0,0,0,.54); }
 .window-titlebar { height: 21px; position: relative; display: flex; align-items: center; justify-content: center; border-bottom: 2px solid #111; background: #d8d8d8; overflow: hidden; cursor: default; }
 .window-titlebar__stripe { position: absolute; inset: 4px 4px; background: repeating-linear-gradient(0deg, #929292 0 1px, transparent 1px 3px); opacity: .65; }
@@ -224,7 +224,6 @@ button { color: inherit; }
   .menubar { padding-right: 4px; }
   .menu-link { padding: 0 6px; }
   .menubar-status { display: none; }
-  .mac-window { left: 3% !important; top: 140px !important; width: 94% !important; height: min(calc(100vh - 190px), 430px) !important; }
   .desktop-icons { top: 29px; left: 5px; right: 5px; height: 100px; gap: 4px; padding-top: 10px; }
   .desktop-icon { flex-basis: 82px; width: 82px; }
   .archive-head, .archive-row { grid-template-columns: 78px minmax(80px, 1fr) 65px; }
@@ -253,3 +252,169 @@ button { color: inherit; }
   .message { max-width: 92%; }
   .desktop-footer { bottom: 7px; }
 }
+
+/* Keep application stacking independent of the desktop menu and modal layers. */
+.desktop-windows { position: absolute; inset: 0; z-index: 10; pointer-events: none; }
+.window-titlebar { touch-action: none; user-select: none; cursor: move; }
+.window-content { overflow: auto; }
+.window-resize { position: absolute; z-index: 2; touch-action: none; user-select: none; }
+.window-resize--n, .window-resize--s { left: 8px; right: 8px; height: 6px; cursor: ns-resize; }
+.window-resize--n { top: -2px; }
+.window-resize--s { bottom: -2px; }
+.window-resize--e, .window-resize--w { top: 8px; bottom: 8px; width: 6px; cursor: ew-resize; }
+.window-resize--e { right: -2px; }
+.window-resize--w { left: -2px; }
+.window-resize--ne, .window-resize--nw, .window-resize--se, .window-resize--sw { width: 10px; height: 10px; }
+.window-resize--ne { top: -2px; right: -2px; cursor: nesw-resize; }
+.window-resize--nw { top: -2px; left: -2px; cursor: nwse-resize; }
+.window-resize--sw { bottom: -2px; left: -2px; cursor: nesw-resize; }
+.window-resize--se { bottom: 0; right: 0; width: 13px; height: 13px; cursor: nwse-resize; background: repeating-linear-gradient(135deg, transparent 0 3px, #777 3px 4px); clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+.conversation { min-height: 0; }
+
+/* Reading state is independent of selection, review verdict, and downloads. */
+.read-status { display: inline-flex !important; align-items: center; gap: 4px; margin-left: 6px; white-space: nowrap; font-size: 9px; font-weight: 400; opacity: .72; }
+.read-status--unread { font-weight: 700; opacity: 1; }
+.read-status__dot { display: inline-block; width: 6px; height: 6px; border: 1px solid currentColor; flex-shrink: 0; }
+.read-status--unread .read-status__dot { background: #c44249; border-color: #72252c; }
+.mail-list button { grid-template-columns: 46px 108px minmax(80px, 1fr) 54px; }
+.mail-list button > .read-status { margin-left: 0; }
+.mail-list button:not(.content-unread) strong { font-weight: 400; }
+.mail-list button.content-unread { font-weight: 700; }
+.archive-row > strong { white-space: normal; }
+.patient-list strong .read-status, .chat-sidebar strong .read-status { margin-left: 0; display: flex !important; margin-top: 4px; }
+@media (max-width: 700px) {
+  .mail-list button { grid-template-columns: 42px minmax(60px, 1fr) 42px; }
+}
+
+/* Sidebar filters use the same interaction in all four applications. */
+.read-filter-tabs { display: flex; flex-direction: column; gap: 3px; padding: 6px 0 10px; border-bottom: 1px solid #999; margin-bottom: 8px; }
+.read-filter-tabs button { display: block; width: 100%; min-height: 28px; padding: 5px 9px; border: 0; background: transparent; text-align: left; cursor: pointer; font-size: 11px; }
+.read-filter-tabs button.is-active { background: var(--blue); color: white; }
+.read-filter-tabs button:hover:not(.is-active) { background: #b9c3d5; }
+.read-filter-tabs button:focus-visible { outline: 2px solid var(--blue); outline-offset: -2px; }
+.archive-layout { display: grid; grid-template-columns: 88px 154px minmax(360px, 1fr); height: 100%; overflow: auto; background: #b9bdbf; }
+.archive-sidebar { padding: 10px 7px; border-right: 1px solid #111; background: #cecece; overflow: auto; }
+.archive-layout .archive-app { min-height: 0; overflow: auto; }
+.archive-layout .archive-head, .archive-layout .archive-row { grid-template-columns: 75px minmax(95px, 1fr) 65px 70px; }
+.filter-empty { padding: 8px; color: #666; font-size: 10px; line-height: 1.6; }
+@media (max-width: 700px) {
+  .archive-layout { grid-template-columns: 76px 130px minmax(340px, 1fr); }
+  .archive-layout .archive-head, .archive-layout .archive-row { grid-template-columns: 70px minmax(80px, 1fr) 65px; }
+}
+
+/* Archive: category → candidate directory → portrait resume. */
+.candidate-directory { display: flex; flex-direction: column; min-height: 0; border-right: 1px solid #888; background: #e7e7e3; }
+.candidate-directory-heading { display: flex; justify-content: space-between; align-items: center; padding: 13px 10px; border-bottom: 1px solid #aaa; font-size: 11px; }
+.candidate-directory-heading span { color: #666; font-size: 9px; }
+.candidate-directory-list { overflow: auto; flex: 1; min-height: 0; }
+.candidate-item { display: flex; flex-direction: column; align-items: flex-start; gap: 5px; width: 100%; padding: 12px 10px; border: 0; border-bottom: 1px solid #ccc; background: transparent; text-align: left; cursor: pointer; overflow-wrap: anywhere; }
+.candidate-item strong { font-size: 12px; }
+.candidate-item small { color: #666; font-size: 10px; }
+.candidate-item .read-status { margin: 0; }
+.candidate-item:hover { background: #d1d9e4; }
+.candidate-item.is-selected { background: var(--blue); color: #fff; }
+.candidate-item.is-selected small { color: #e4e8ff; }
+.candidate-item:focus-visible { outline: 2px solid #5375bb; outline-offset: -3px; }
+.resume-viewer { min-height: 0; min-width: 0; overflow: auto; padding: 14px; }
+.resume-sheet { width: 100%; max-width: 620px; min-height: 0; margin: 0 auto; padding: 20px 24px 14px; background: #fffefb; color: #29333a; border: 1px solid #b1b1a9; box-shadow: 2px 3px 7px #0002; font-family: 'Songti SC', 'SimSun', Georgia, serif; font-size: 12px; line-height: 1.45; }
+.resume-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; padding-bottom: 12px; border-bottom: 2px solid #2d4656; }
+.resume-identity { min-width: 0; overflow-wrap: anywhere; }
+.resume-kicker { margin: 0 0 9px; color: #667680; font-size: 10px; letter-spacing: 2px; }
+.resume-heading h1 { margin: 0 0 4px; font-size: 25px; line-height: 1.2; letter-spacing: 2px; }
+.resume-level { margin: 0 0 6px; color: #53616b; font-size: 10px; }
+.resume-photo { flex: 0 0 72px; width: 72px; height: 94px; border: 1px solid #d0d3d1; background: #eff0ec; }
+.resume-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.resume-photo-placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: #87918e; }
+.resume-photo-placeholder > span { font-size: 25px; }
+.resume-photo-placeholder small { font-size: 9px; }
+.resume-status { display: inline-block; padding: 2px 9px; border: 1px solid #ada38b; color: #77613d; background: #f6f0df; font-family: Monaco, monospace; font-size: 10px; white-space: nowrap; }
+.resume-status--approved { border-color: #8da895; color: #335c42; background: #edf5ee; }
+.resume-status--rejected { border-color: #c69994; color: #923d37; background: #fff0ed; }
+.resume-section { margin: 12px 0; }
+.resume-section h3, .resume-review h3 { margin: 0 0 5px; font-size: 12px; letter-spacing: 1px; color: #2d4656; }
+.resume-section h3 { border-bottom: 1px solid #cfd4d4; padding-bottom: 3px; }
+.resume-section dl { margin: 0; }
+.resume-section dl > div { display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 8px; padding: 2px 0; }
+.resume-section dt { color: #6a7478; }
+.resume-section dd { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.resume-attachments { margin: 0; padding-left: 19px; color: #606b73; font-size: 11px; overflow-wrap: anywhere; }
+.resume-review { margin-top: 16px; padding: 10px 11px; border: 1px solid #c5cdc9; background: #f3f5f1; font-family: Monaco, 'Courier New', monospace; font-size: 10px; }
+.resume-review-heading { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 7px; }
+.resume-review h3 { margin: 0; }
+.resume-photo-check { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 5px; }
+.resume-note { margin: 7px 0; color: #6b7376; font-size: 9px; line-height: 1.45; }
+.resume-clue, .resume-error { color: #983e37; }
+.resume-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; padding-top: 8px; border-top: 1px dashed #c4cdc7; }
+.resume-actions > span { font-size: 10px; }
+.resume-review .default-button { height: auto; min-height: 28px; padding: 3px 10px; }
+.resume-approve { color: #2e523b; background: #dce9db; }
+.resume-reject { color: #873f37; background: #f0ddda; }
+.resume-review button:disabled { opacity: .55; cursor: default; box-shadow: none; }
+.resume-footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 5px; margin-top: 12px; padding-top: 6px; border-top: 1px solid #ddd; color: #8a8e8c; font-family: Monaco, monospace; font-size: 8px; overflow-wrap: anywhere; }
+.resume-empty { max-width: 330px; margin: 70px auto; padding: 20px; text-align: center; color: #4f5c65; line-height: 1.8; }
+.resume-empty-icon { font-size: 42px; }
+.resume-empty h2 { font-size: 16px; font-weight: 500; }
+.resume-empty p { font-size: 11px; }
+@media (max-width: 700px) { .resume-viewer { padding: 12px; } .resume-sheet { padding: 24px 18px 18px; } }
+
+/* Three-column workspaces: reading category, directory, selected content. */
+.workspace-layout { display: grid; grid-template-columns: 88px 180px minmax(300px, 1fr); height: 100%; overflow: auto; background: #ededed; }
+.workspace-categories { min-height: 0; padding: 10px 7px; overflow: auto; border-right: 1px solid #111; background: #cecece; }
+.workspace-detail { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+.workspace-detail-heading { padding: 12px 14px; border-bottom: 1px solid #aaa; background: #dedede; overflow-wrap: anywhere; }
+.directory-tools { padding: 7px 10px; border-bottom: 1px solid #ccc; }
+.directory-tools .default-button { width: 100%; font-size: 10px; }
+.mail-detail .mail-reader { flex: 1; padding: 16px; font-size: 12px; line-height: 1.65; overflow-wrap: anywhere; }
+.mail-attachment { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; padding: 8px; border: 1px solid #ccc; background: #f1efe5; }
+.mail-attachment > span { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.mail-attachment button { flex-shrink: 0; }
+.medical-detail .patient-record { flex: 1; min-height: 0; }
+.medical-detail .vitals-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 12px 0; }
+.medical-detail .vitals-grid div { min-height: 54px; border-bottom: 1px solid #ccc; overflow-wrap: anywhere; }
+.chat-contact { flex-direction: row; align-items: center; gap: 8px; }
+.chat-contact > span:last-child { min-width: 0; }
+.chat-contact strong, .chat-contact small { display: block; margin-bottom: 4px; }
+.chat-layout .conversation > header, .chat-layout .directive-banner { flex-shrink: 0; }
+.chat-layout .directive-banner { flex-wrap: wrap; }
+.chat-layout .message-list .default-button { height: auto; min-height: 28px; max-width: 100%; padding: 4px 8px; white-space: normal; text-align: left; }
+@media (max-width: 700px) { .workspace-layout { grid-template-columns: 76px 154px minmax(280px, 1fr); } }
+
+/* Video interview: portrait above the transcript, replies anchored below it. */
+.chat-layout .conversation { overflow: auto; background: #deded9; }
+.video-dialogue { display: grid; grid-template-rows: max-content minmax(140px, 1fr) auto; flex: 1; min-height: 460px; gap: 0; }
+.call-screen { position: relative; width: 100%; aspect-ratio: 21 / 9; min-height: 0; align-self: start; overflow: hidden; background: radial-gradient(ellipse at 45% 85%, #506c73, #1d303a 80%); color: #e2ebdf; border-bottom: 2px solid #172730; }
+.call-screen-heading { position: relative; z-index: 1; display: flex; justify-content: space-between; gap: 10px; padding: 7px 10px; background: #14252ed9; font-size: 10px; }
+.call-screen-heading small { color: #bacdc1; font-size: 9px; }
+.call-portrait { position: absolute; inset: 29px 80px 0; display: flex; justify-content: center; align-items: flex-end; }
+.call-portrait svg { height: 100%; max-width: 100%; fill: #95aaa5; opacity: .65; }
+.call-portrait img { width: 100%; height: 100%; object-fit: contain; }
+.call-placeholder-label { position: absolute; bottom: 8px; font-size: 9px; color: #dae4df; background: #20323bc9; padding: 2px 5px; }
+.call-nameplate { position: absolute; left: 10px; bottom: 9px; display: flex; flex-direction: column; gap: 3px; text-shadow: 1px 1px #15232a; }
+.call-nameplate strong { font-size: 13px; }
+.call-nameplate span { font-size: 9px; color: #b9ccc6; }
+.call-self { position: absolute; right: 10px; bottom: 9px; width: 66px; height: 57px; border: 1px solid #899c99; background: #344951; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 5px; box-shadow: 2px 2px #0003; }
+.call-self > span { font-size: 17px; color: #cbdbd3; }
+.call-self small { font-size: 8px; color: #a7bab5; }
+.call-transcript { min-height: 0; display: flex; flex-direction: column; background: #f5f2e9; }
+.call-transcript-heading { flex-shrink: 0; padding: 6px 12px; border-bottom: 1px solid #d6d4cb; font-size: 10px; color: #56636b; }
+.call-transcript-heading span { float: right; color: #88908e; }
+.call-message-list { flex: 1; min-height: 0; overflow-y: auto; padding: 10px 12px; display: flex; flex-direction: column; gap: 12px; }
+.call-message { align-self: flex-start; max-width: 88%; }
+.call-message small { display: block; margin-bottom: 4px; color: #687576; font-size: 9px; }
+.call-message p { margin: 0; padding: 8px 10px; border: 1px solid #a9b1ab; background: #fffef9; color: #263c42; line-height: 1.6; font-size: 12px; overflow-wrap: anywhere; white-space: pre-wrap; box-shadow: 1px 1px #0001; }
+.call-message--self { align-self: flex-end; }
+.call-message--self small { text-align: right; }
+.call-message--self p { background: #dce8e5; border-color: #98aba6; }
+.call-message--pending { opacity: .65; }
+.call-replies { border-top: 1px solid #9fa9a4; padding: 10px 12px; background: #e5e8e2; max-height: 210px; overflow-y: auto; }
+.call-replies-heading { margin: 0 0 7px; font-size: 10px; color: #4f5d62; }
+.call-reply-options { display: flex; flex-direction: column; gap: 6px; }
+.call-reply { display: flex; align-items: flex-start; gap: 8px; padding: 7px 9px; width: 100%; text-align: left; border: 1px solid #86968f; background: #fafbf5; box-shadow: 1px 1px #acb6af; font-size: 11px; line-height: 1.5; cursor: pointer; }
+.call-reply > span { flex-shrink: 0; color: #6a7a75; }
+.call-reply:hover:not(:disabled), .call-reply:focus-visible { background: #d7e4df; outline: 1px solid #52796b; }
+.call-reply:disabled { opacity: .55; cursor: wait; }
+.call-ended { margin: 0; color: #6b7573; font-size: 10px; line-height: 1.6; }
+.call-replies .directive-banner { border: 1px solid #c6b98d; margin: 0 0 8px; }
+.call-empty { margin: auto; padding: 24px; text-align: center; color: #607270; line-height: 1.7; }
+.call-empty > span { font-size: 44px; }
+.call-empty h2 { font-size: 16px; }

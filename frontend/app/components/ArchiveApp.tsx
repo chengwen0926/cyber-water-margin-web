@@ -1,169 +1,186 @@
 'use client';
 
-import { useState } from 'react';
-
+import { useEffect, useRef, useState } from 'react';
 import { archiveApi, reviewApi } from '@/lib/api';
-import type { ArchiveDetail, ArchiveSummary, CaseJudgement, Clue } from '@/lib/api';
+import type { ArchiveDetail, ArchiveSummary, CaseJudgement, Clue, ResumeField } from '@/lib/api';
 import { useApi } from '@/lib/useApi';
+import { ReadFilterTabs, type ReadFilter, ReadStatus, useReadReceipt, useReading } from './ReadingProvider';
 import { useGame } from './GameProvider';
 
-export function ArchiveApp() {
+const levelLabels: Record<string, string> = { intern: '实习生', staff: '正式员工', senior: '高级员工' };
+const sections = [
+  { title: '基本信息', keys: ['gender', 'marital_status'] },
+  { title: '教育背景', keys: ['graduation_year'] },
+  { title: '工作经历', keys: ['prior_employment'] },
+  { title: '补充信息', keys: ['health_status', 'criminal_record'] },
+];
+
+function ResumeSection({ title, fields }: { title: string; fields: ResumeField[] }) {
+  if (!fields.length) return null;
+  return <section className="resume-section">
+    <h3>{title}</h3>
+    <dl>{fields.map((field) => <div key={field.key}><dt>{field.label}</dt><dd>{field.value || '未填写'}</dd></div>)}</dl>
+  </section>;
+}
+
+function ResumePhoto({ src, name }: { src: string; name: string }) {
+  const [failed, setFailed] = useState(false);
+  return <div className="resume-photo">
+    {src && !failed ? <img src={src} alt={`${name}的简历照片`} onError={() => setFailed(true)} /> :
+      <div className="resume-photo-placeholder"><span aria-hidden="true">▧</span><small>暂无照片</small></div>}
+  </div>;
+}
+
+export function ArchiveApp({ isActive }: { isActive: boolean }) {
+  const { entries } = useReading();
   const { refetchQueue, dataVersion } = useGame();
-  const { data: summaries, loading, refetch } = useApi<ArchiveSummary[]>(
-    () => archiveApi.listArchive(),
-    [dataVersion],
-  );
+  const { data: summaries, loading, error: listError, refetch } = useApi<ArchiveSummary[]>(() => archiveApi.listArchive(), [dataVersion]);
+  const [readFilter, setReadFilter] = useState<ReadFilter>('all');
   const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
   const [detail, setDetail] = useState<ArchiveDetail | null>(null);
+  const [detailLoading, setDetailLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [lastJudgement, setLastJudgement] = useState<CaseJudgement | null>(null);
   const [photoChecked, setPhotoChecked] = useState(false);
   const [photoClue, setPhotoClue] = useState<Clue | null>(null);
+  const [busy, setBusy] = useState<'photo' | 'verdict' | null>(null);
+  const [retry, setRetry] = useState(0);
+  const selection = useRef(selectedCaseId);
+  selection.current = selectedCaseId;
+  const pendingAction = useRef(false);
 
   const list = summaries ?? [];
-  const activeCaseId = selectedCaseId ?? list[0]?.case_id ?? null;
+  const filteredList = list.filter((item) => readFilter === 'all' || entries.archive[item.case_id]?.is_read === (readFilter === 'read'));
+  const activeSummary = list.find((item) => item.case_id === selectedCaseId);
+  const currentDetail = detail?.case.case_id === selectedCaseId ? detail : null;
+  const resume = currentDetail?.case.resume;
+  const judgement = lastJudgement?.case_id === selectedCaseId ? lastJudgement : null;
+  const verdict = judgement?.player_verdict ?? activeSummary?.verdict;
+  const status = verdict === 'approved' ? '已通过' : verdict === 'rejected' ? '已拒绝' : '待审查';
 
-  const loadDetail = (caseId: string) => {
-    setSelectedCaseId(caseId);
+  useEffect(() => {
+    setDetail(null);
     setLastJudgement(null);
     setPhotoChecked(false);
     setPhotoClue(null);
-    archiveApi
-      .getArchive(caseId)
-      .then(setDetail)
-      .catch(() => setDetail(null));
-  };
+    setError(null);
+    setDetailLoading(false);
+    if (!selectedCaseId) return;
+    let cancelled = false;
+    setDetailLoading(true);
+    archiveApi.getArchive(selectedCaseId).then((result) => {
+      if (!cancelled) setDetail(result);
+    }).catch(() => { if (!cancelled) setError('简历加载失败，请重试。'); })
+      .finally(() => { if (!cancelled) setDetailLoading(false); });
+    return () => { cancelled = true; };
+  }, [selectedCaseId, retry]);
 
-  const currentDetail = detail && detail.case.case_id === activeCaseId ? detail : null;
+  useReadReceipt('archive', currentDetail?.case.case_id ?? null, isActive && currentDetail !== null);
 
   const handleAutoFlag = async () => {
-    if (!activeCaseId) return;
-    const result = await archiveApi.autoFlagArchive(activeCaseId);
-    setPhotoChecked(true);
-    setPhotoClue(result.clue);
+    if (!selectedCaseId || !resume || pendingAction.current) return;
+    const caseId = selectedCaseId;
+    pendingAction.current = true;
+    setBusy('photo');
+    setError(null);
+    try {
+      const result = await archiveApi.autoFlagArchive(caseId);
+      if (selection.current !== caseId) return;
+      setPhotoChecked(true);
+      setPhotoClue(result.clue);
+    } catch {
+      if (selection.current === caseId) setError('照片检查失败，请重试。');
+    } finally {
+      pendingAction.current = false;
+      setBusy(null);
+    }
   };
 
-  const handleVerdict = async (verdict: 'approved' | 'rejected') => {
-    if (!activeCaseId) return;
-    const judgement = await reviewApi.submitVerdict(activeCaseId, verdict);
-    setLastJudgement(judgement);
-    refetch();
-    refetchQueue();
+  const handleVerdict = async (nextVerdict: 'approved' | 'rejected') => {
+    if (!selectedCaseId || !resume || verdict || pendingAction.current) return;
+    const caseId = selectedCaseId;
+    pendingAction.current = true;
+    setBusy('verdict');
+    setError(null);
+    try {
+      const result = await reviewApi.submitVerdict(caseId, nextVerdict);
+      if (selection.current === caseId) setLastJudgement(result);
+      refetch();
+      refetchQueue();
+    } catch {
+      if (selection.current === caseId) setError('判定提交失败，请重试。');
+    } finally {
+      pendingAction.current = false;
+      setBusy(null);
+    }
   };
-
-  const activeSummary = list.find((item) => item.case_id === activeCaseId);
-  const photo = currentDetail?.case.resume.photo;
 
   return (
-    <div className="archive-app">
-      <div className="app-toolbar">
-        <span className="app-counter">{loading ? '加载中...' : `${list.length} 份档案`}</span>
-        <button onClick={handleAutoFlag} disabled={!activeCaseId} className="default-button">
-          一键发现问题
-        </button>
-      </div>
-      <div className="archive-head">
-        <span>候选人</span>
-        <span>级别</span>
-        <span>状态</span>
-        <span>判定</span>
-      </div>
-      <div className="archive-list" role="listbox" aria-label="Archive records">
-        {list.map((item) => (
-          <button
-            key={item.case_id}
-            className={`archive-row ${activeCaseId === item.case_id ? 'is-selected' : ''}`}
-            onClick={() => loadDetail(item.case_id)}
-          >
-            <span>{item.npc_id}</span>
+    <div className="archive-layout">
+      <aside className="archive-sidebar" aria-label="档案分类">
+        <div className="section-label">档案分类</div>
+        <ReadFilterTabs value={readFilter} onChange={(value) => { setReadFilter(value); setSelectedCaseId(null); }} />
+      </aside>
+      <nav className="candidate-directory" aria-label="候选人目录">
+        <div className="candidate-directory-heading"><strong>候选人</strong><span>{filteredList.length} 份</span></div>
+        <div className="candidate-directory-list">
+          {filteredList.map((item) => <button key={item.case_id} type="button"
+            className={`candidate-item ${selectedCaseId === item.case_id ? 'is-selected' : ''}`}
+            aria-current={selectedCaseId === item.case_id ? 'true' : undefined}
+            onClick={() => setSelectedCaseId(item.case_id)}>
             <strong>{item.npc_name}</strong>
-            <span>{item.npc_level}</span>
-            <span>{item.verdict ?? '待审查'}</span>
-          </button>
-        ))}
-        {!loading && list.length === 0 && (
-          <div style={{ padding: 12, color: '#777' }}>暂无已下载的档案，请先在邮箱中下载简历附件。</div>
-        )}
-      </div>
-
-      {currentDetail && (
-        <div style={{ borderTop: '1px solid #111', padding: 8, background: '#fff', overflow: 'auto' }}>
-          <div style={{ display: 'flex', gap: 12, marginBottom: 8 }}>
-            {photo && (
-              <div
-                className={photoChecked && photo.is_anomalous ? 'is-falsified' : ''}
-                style={{ flex: '0 0 96px', border: '1px solid #999', padding: 4, textAlign: 'center' }}
-              >
-                <div
-                  style={{
-                    width: 88,
-                    height: 88,
-                    background: '#dcdcdc',
-                    display: 'grid',
-                    placeItems: 'center',
-                    fontSize: 9,
-                    color: '#888',
-                  }}
-                >
-                  照片
-                </div>
-                <div style={{ fontSize: 8, marginTop: 4, color: '#555' }}>简历照片</div>
-                {photoChecked && (
-                  <div style={{ fontSize: 8, marginTop: 2, color: photo.is_anomalous ? '#a11' : '#2a7d33' }}>
-                    {photo.is_anomalous ? '照片异常' : '照片正常'}
-                  </div>
-                )}
-              </div>
-            )}
-            <div style={{ flex: 1 }}>
-              <div style={{ marginBottom: 6, fontWeight: 500 }}>{activeSummary?.npc_name} 简历字段</div>
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 10 }}>
-                <tbody>
-                  {currentDetail.case.resume.fields.map((field) => (
-                    <tr key={field.key}>
-                      <td style={{ padding: '3px 6px', color: '#555' }}>{field.label}</td>
-                      <td style={{ padding: '3px 6px' }}>{field.value}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              <div style={{ marginTop: 6, fontSize: 9, color: '#777' }}>
-                文字字段的真实性无法在此确认，请前往「医疗库」与体检记录比对。
-              </div>
-            </div>
-          </div>
-          {photoChecked && (
-            <div style={{ marginTop: 6, fontSize: 10, color: '#555' }}>
-              {photoClue ? `发现问题：${photoClue.description}` : '未发现照片异常'}
-            </div>
-          )}
-          <div style={{ marginTop: 10, display: 'flex', gap: 8 }}>
-            {activeSummary?.verdict ? (
-              <span style={{ fontSize: 10, color: '#555', alignSelf: 'center' }}>
-                已判定：{activeSummary.verdict === 'approved' ? '通过' : '拒绝'}
-              </span>
-            ) : (
-              <>
-                <button className="default-button" onClick={() => handleVerdict('approved')}>
-                  通过
-                </button>
-                <button className="default-button" onClick={() => handleVerdict('rejected')}>
-                  拒绝
-                </button>
-              </>
-            )}
-            {lastJudgement && (
-              <span style={{ fontSize: 10, color: lastJudgement.is_correct ? '#2a7d33' : '#a11', alignSelf: 'center' }}>
-                {lastJudgement.is_correct ? '判定正确' : '判定有误'}
-              </span>
-            )}
-          </div>
+            <small>{levelLabels[item.npc_level] ?? item.npc_level}</small>
+            <ReadStatus channel="archive" id={item.case_id} />
+          </button>)}
+          {loading && <p className="filter-empty">加载目录中…</p>}
+          {!loading && !listError && filteredList.length === 0 && <p className="filter-empty">{list.length ? '此分类下暂无档案' : '请先在邮箱下载简历附件'}</p>}
+          {!!listError && <div className="filter-empty" role="alert">目录加载失败<button className="default-button" onClick={refetch}>重试</button></div>}
         </div>
-      )}
-
-      <div className="app-statusbar">
-        <span>档案系统 • 已解锁数据</span>
-        <span>{activeCaseId ?? '未选择'}</span>
-      </div>
+      </nav>
+      <section className="resume-viewer" aria-label="候选人简历">
+        {resume && activeSummary ? (
+          <article className="resume-sheet" key={selectedCaseId} aria-label={`${activeSummary.npc_name}的完整简历`}>
+            <header className="resume-heading">
+              <div className="resume-identity">
+                <p className="resume-kicker">个人简历 / RESUME</p>
+                <h1>{activeSummary.npc_name}</h1>
+                <p className="resume-level">候选人级别 · {levelLabels[activeSummary.npc_level] ?? activeSummary.npc_level}</p>
+                <span className={`resume-status resume-status--${verdict ?? 'pending'}`}>{status}</span>
+              </div>
+              <ResumePhoto key={resume.photo.photo_url} src={resume.photo.photo_url} name={activeSummary.npc_name} />
+            </header>
+            <div className="resume-body">
+              {sections.map((section) => <ResumeSection key={section.title} title={section.title} fields={resume.fields.filter((field) => section.keys.includes(field.key))} />)}
+              <ResumeSection title="其他资料" fields={resume.fields.filter((field) => !sections.some((section) => section.keys.includes(field.key)))} />
+              {resume.attachments.length > 0 && <section className="resume-section">
+                <h3>随附材料</h3>
+                <ul className="resume-attachments">{resume.attachments.map((attachment, index) => <li key={`${attachment}-${index}`}>{attachment.split('/').pop()}</li>)}</ul>
+              </section>}
+            </div>
+            <section className="resume-review" aria-label="简历审查">
+              <div className="resume-review-heading"><h3>审查记录</h3><span className={`resume-status resume-status--${verdict ?? 'pending'}`}>{status}</span></div>
+              <div className="resume-photo-check">
+                <span>{photoChecked ? photoClue ? '照片异常' : '未发现照片异常' : '照片尚未核验'}</span>
+                <button className="default-button" onClick={handleAutoFlag} disabled={busy !== null}>{busy === 'photo' ? '检查中…' : '检查简历照片'}</button>
+              </div>
+              {photoChecked && photoClue && <p className="resume-clue" role="status">{photoClue.description}</p>}
+              <p className="resume-note">文字信息请前往医疗库核对。阅读简历不代表已完成审查。</p>
+              <div className="resume-actions">
+                <button className="default-button resume-approve" onClick={() => handleVerdict('approved')} disabled={busy !== null || !!verdict}>通过</button>
+                <button className="default-button resume-reject" onClick={() => handleVerdict('rejected')} disabled={busy !== null || !!verdict}>拒绝</button>
+                <span role="status">{busy === 'verdict' ? '正在提交判定…' : judgement ? judgement.is_correct ? '判定正确' : '判定有误' : verdict ? '判定已提交' : '请选择审查结果'}</span>
+              </div>
+              {error && <p className="resume-error" role="alert">{error}</p>}
+            </section>
+            <footer className="resume-footer"><span>档案编号 · {selectedCaseId}</span><span>候选人 · {activeSummary.npc_id}</span></footer>
+          </article>
+        ) : <div className="resume-empty" role="status">
+          <span className="resume-empty-icon" aria-hidden="true">▤</span>
+          <h2>{detailLoading ? '正在载入简历…' : selectedCaseId ? '简历暂不可用' : '选择一位候选人'}</h2>
+          <p>{error ?? '从左侧候选人目录打开完整简历，在简历中核验资料并提交审查结果。'}</p>
+          {error && <button className="default-button" onClick={() => setRetry((value) => value + 1)}>重新加载</button>}
+        </div>}
+      </section>
     </div>
   );
 }

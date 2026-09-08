@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from fastapi import APIRouter, HTTPException
 
-from core.events import broadcaster
+from services.chat_notifications import publish_call
 from data import penalty_rule_loader, save_manager, script_loader
 from models.settlement import DayResult
 from services import day_result_builder
@@ -43,7 +43,7 @@ def settle_today() -> DayResult:
             boss_scripts = script_loader.load_all_boss_scripts()
             script_id = boss_scripts[0].script_id if boss_scripts else None
         if script_id:
-            broadcaster.publish({"event": "incoming_call", "script_id": script_id})
+            publish_call(script_id)
 
     return result
 

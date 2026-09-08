@@ -200,3 +200,11 @@ export type IncomingCallEvent = {
   event: 'incoming_call';
   script_id: string;
 };
+
+export type ChatMessage = { speaker: 'boss' | 'npc' | 'player'; text: string };
+export type ChatSession = {
+  contact_id: string;
+  script_id: string;
+  current_node: DialogueNode;
+  messages: ChatMessage[];
+};

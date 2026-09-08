@@ -3,7 +3,7 @@ from __future__ import annotations
 from fastapi import APIRouter, HTTPException
 
 from core.config import TOTAL_DAYS
-from core.events import broadcaster
+from services.chat_notifications import publish_call
 from data import email_loader, queue_store, schedule_loader, script_loader
 from models.email import Email, EmailAttachment
 from models.queue import DailyGenerationResult, DailyQueue
@@ -12,38 +12,23 @@ from services.daily_queue_builder import DailyQueueBuilder
 router = APIRouter(prefix="/api/day", tags=["day"])
 
 
-def _schedule_email(day: int, schedule) -> Email:
-    rules_desc = "；".join(r.description for r in schedule.review_rules)
+def _daily_email(day: int, schedule, cases: list) -> Email:
+    rules = "\n".join(f"• {rule.description}" for rule in schedule.review_rules)
     return Email(
-        email_id=f"email_schedule_{day}",
+        email_id=f"email_daily_{day}",
         day=day,
         sender="人事系统",
-        subject=f"第{day}天工作安排",
+        subject=f"第{day}天工作安排与候选人简历",
         body=(
             f"今日共有 {schedule.npc_count} 位候选人前来面试，"
-            f"允许通过级别：{'、'.join(schedule.allowed_npc_levels)}。\n"
-            f"今日审查规则：{rules_desc or '无特殊规则'}。"
+            f"允许通过级别：{'、'.join(schedule.allowed_npc_levels)}。\n\n"
+            f"今日审查规则：\n{rules or '无特殊规则'}\n\n"
+            "以下为今日待审查候选人的简历附件，请下载后前往档案系统查阅。"
         ),
-        attachments=[],
-    )
-
-
-def _resume_email(day: int, cases: list) -> Email:
-    attachments = [
-        EmailAttachment(
-            attachment_id=f"attachment_{case.case_id}",
-            case_id=case.case_id,
+        attachments=[EmailAttachment(
+            attachment_id=f"attachment_{case.case_id}", case_id=case.case_id,
             filename=f"{case.case_id}_resume.pdf",
-        )
-        for case in cases
-    ]
-    return Email(
-        email_id=f"email_resumes_{day}",
-        day=day,
-        sender="招聘平台",
-        subject=f"第{day}天候选人简历",
-        body="以下为今日待审查候选人的简历附件，请下载后前往档案系统查阅。",
-        attachments=attachments,
+        ) for case in cases],
     )
 
 
@@ -76,16 +61,13 @@ def advance_day() -> DailyGenerationResult:
     script_pool = script_loader.load_all_npc_scripts()
     result = DailyQueueBuilder().build(schedule, seed=next_day, script_pool=script_pool)
     queue_store.save(result.queue)
-    email_loader.append(_schedule_email(next_day, schedule))
-    email_loader.append(_resume_email(next_day, result.cases))
+    email_loader.append(_daily_email(next_day, schedule, result.cases))
 
     save_manager.update(lambda s: _set_current_day(s, next_day))
 
     boss_scripts = script_loader.load_all_boss_scripts()
     if boss_scripts:
-        broadcaster.publish(
-            {"event": "incoming_call", "script_id": boss_scripts[0].script_id}
-        )
+        publish_call(boss_scripts[0].script_id)
 
     return result
 

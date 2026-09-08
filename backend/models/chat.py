@@ -26,3 +26,15 @@ class ChatScript(BaseModel):
     archetype_tags: list[str] = []
     nodes: dict[str, DialogueNode]
     start_node_id: str
+
+
+class ChatMessage(BaseModel):
+    speaker: Literal["boss", "npc", "player"]
+    text: str
+
+
+class ChatSession(BaseModel):
+    contact_id: str
+    script_id: str
+    current_node: DialogueNode
+    messages: list[ChatMessage]

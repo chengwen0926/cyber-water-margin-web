@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from api import archive, chat, day, directives, email, events, medical, review, schedule, settlement
+from api import reading
 from core.config import CORS_ORIGINS, ensure_save_exists
 
 app = FastAPI(title="赛博水浒入职日 API")
@@ -20,6 +21,8 @@ app.add_middleware(
 @app.on_event("startup")
 def on_startup() -> None:
     ensure_save_exists()
+    from services.email_migration import migrate_daily_emails
+    migrate_daily_emails()
 
 
 app.include_router(schedule.router)
@@ -32,6 +35,7 @@ app.include_router(review.router)
 app.include_router(directives.router)
 app.include_router(settlement.router)
 app.include_router(events.router)
+app.include_router(reading.router)
 
 
 @app.get("/api/health")

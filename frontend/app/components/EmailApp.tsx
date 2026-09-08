@@ -1,58 +1,68 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { emailApi } from '@/lib/api';
 import type { Email } from '@/lib/api';
 import { useApi } from '@/lib/useApi';
+import { ReadFilterTabs, type ReadFilter, ReadStatus, useReadReceipt, useReading } from './ReadingProvider';
 import { useGame } from './GameProvider';
 
-export function EmailApp() {
+export function EmailApp({ isActive }: { isActive: boolean }) {
+  const [readFilter, setReadFilter] = useState<ReadFilter>('all');
+  const { entries } = useReading();
   const { refetchQueue, dataVersion } = useGame();
   const { data: emails, loading, refetch } = useApi<Email[]>(() => emailApi.listEmails(), [dataVersion]);
+  const { data: savedDownloads, refetch: refetchDownloads } = useApi<{ attachment_ids: string[] }>(() => emailApi.listDownloadedAttachments(), [dataVersion]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [downloaded, setDownloaded] = useState<Set<string>>(new Set());
 
+  useEffect(() => {
+    if (savedDownloads) setDownloaded(new Set(savedDownloads.attachment_ids));
+  }, [savedDownloads]);
+
   const list = emails ?? [];
-  const selected = list.find((item) => item.email_id === selectedId) ?? list[0] ?? null;
+  const filteredList = list.filter((item) => readFilter === 'all' ||
+    entries.email[item.email_id]?.is_read === (readFilter === 'read'));
+
+  const selected = list.find((item) => item.email_id === selectedId) ?? null;
+
+  useReadReceipt('email', selected?.email_id ?? null, isActive && selected !== null);
 
   const handleDownload = async (emailId: string, attachmentId: string) => {
     await emailApi.downloadAttachment(emailId, attachmentId);
     setDownloaded((prev) => new Set(prev).add(attachmentId));
+    refetchDownloads();
     refetchQueue();
   };
 
   return (
-    <div className="mail-app">
-      <aside className="mail-sidebar">
-        <div className="mail-account">
-          <span>
-            <strong>Email</strong>
-            <small>{loading ? '加载中...' : `Connected · ${list.length} 封`}</small>
-          </span>
-        </div>
-        <button className="is-active">收件箱</button>
+    <div className="workspace-layout mail-layout">
+      <aside className="workspace-categories" aria-label="邮件分类">
+        <div className="section-label">邮件分类</div>
+        <ReadFilterTabs value={readFilter} onChange={(value) => { setReadFilter(value); setSelectedId(null); }} />
       </aside>
-      <section className="mail-main">
-        <div className="mail-actions">
-          <button onClick={() => refetch()}>刷新</button>
+      <nav className="candidate-directory" aria-label="邮件目录">
+        <div className="candidate-directory-heading"><strong>收件箱</strong><span>{filteredList.length} 封</span></div>
+        <div className="directory-tools"><button className="default-button" onClick={refetch}>刷新邮件</button></div>
+        <div className="candidate-directory-list">
+          {filteredList.map((item) => (
+            <button key={item.email_id} type="button"
+              className={`candidate-item ${selected?.email_id === item.email_id ? 'is-selected' : ''}`}
+              aria-current={selected?.email_id === item.email_id ? 'true' : undefined}
+              onClick={() => setSelectedId(item.email_id)}>
+              <strong>{item.subject}</strong>
+              <small>{item.sender} · 第{item.day}天</small>
+              <ReadStatus channel="email" id={item.email_id} />
+            </button>
+          ))}
+          {loading && <p className="filter-empty">加载邮件中…</p>}
+          {!loading && filteredList.length === 0 && <p className="filter-empty">暂无符合条件的邮件</p>}
         </div>
-        <div className="mail-workspace">
-          <div className="mail-list">
-            {list.map((item) => (
-              <button
-                key={item.email_id}
-                className={selected?.email_id === item.email_id ? 'is-selected' : ''}
-                onClick={() => setSelectedId(item.email_id)}
-              >
-                <span className="unread-dot is-unread" />
-                <strong>{item.sender}</strong>
-                <span>{item.subject}</span>
-                <time>第{item.day}天</time>
-              </button>
-            ))}
-          </div>
-          <article className="mail-reader">
+      </nav>
+      <section className="workspace-detail mail-detail" aria-label="邮件内容">
+        <div className="workspace-detail-heading"><strong>{selected?.subject ?? '邮件内容'}</strong></div>
+        <article className="mail-reader">
             {selected ? (
               <>
                 <div className="mail-meta">
@@ -68,7 +78,7 @@ export function EmailApp() {
                       return (
                         <div
                           key={attachment.attachment_id}
-                          style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}
+                          className="mail-attachment"
                         >
                           <span>{attachment.filename}</span>
                           <button
@@ -85,14 +95,10 @@ export function EmailApp() {
                 )}
               </>
             ) : (
-              <p>暂无邮件</p>
+              <p>请从列表中选择一封邮件</p>
             )}
-          </article>
-        </div>
-        <div className="app-statusbar">
-          <span>{list.length} messages</span>
-          <span>Last checked just now</span>
-        </div>
+        </article>
+        <div className="app-statusbar"><span>{list.length} 封邮件 · {list.filter((item) => entries.email[item.email_id]?.is_read === false).length} 封未读</span></div>
       </section>
     </div>
   );

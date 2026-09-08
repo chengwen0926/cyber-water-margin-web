@@ -1,14 +1,17 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { archiveApi, chatApi, directivesApi } from '@/lib/api';
-import type { ArchiveSummary, ChatContact, ChatScript, DialogueNode, SpecialDirective } from '@/lib/api';
+import type { ArchiveSummary, ChatContact, ChatSession, SpecialDirective } from '@/lib/api';
 import { useApi } from '@/lib/useApi';
 import { DialogueTreeView } from './DialogueTreeView';
+import { ReadFilterTabs, type ReadFilter, ReadStatus, useReadReceipt, useReading } from './ReadingProvider';
 import { useGame } from './GameProvider';
 
-export function ChatApp() {
+export function ChatApp({ isActive }: { isActive: boolean }) {
+  const [readFilter, setReadFilter] = useState<ReadFilter>('all');
+  const { entries: reading, refresh: refreshReading } = useReading();
   const { incomingCall, clearIncomingCall, dataVersion } = useGame();
   const { data: contacts } = useApi<ChatContact[]>(() => chatApi.listChatContacts(), [dataVersion]);
   const { data: archiveSummaries } = useApi<ArchiveSummary[]>(() => archiveApi.listArchive(), [dataVersion]);
@@ -18,57 +21,83 @@ export function ChatApp() {
   );
 
   const [selectedContactId, setSelectedContactId] = useState<string | null>(null);
-  const [script, setScript] = useState<ChatScript | null>(null);
-  const [currentNode, setCurrentNode] = useState<DialogueNode | null>(null);
+  const [loaded, setLoaded] = useState<{ version: string; session: ChatSession } | null>(null);
+  const [pending, setPending] = useState<{ contactId: string; scriptId: string; text: string } | null>(null);
+  const sending = useRef(false);
+  const [reload, setReload] = useState(0);
   const [toast, setToast] = useState<string | null>(null);
-
   const list = contacts ?? [];
-  const selected = list.find((c) => c.id === selectedContactId) ?? list[0] ?? null;
+  const filteredList = list.filter((item) => readFilter === 'all' ||
+    reading.chat[item.id]?.is_read === (readFilter === 'read'));
+
+  const selected = list.find((c) => c.id === selectedContactId) ?? null;
+  const selectedId = selected?.id ?? null;
+  const receipt = selectedId ? reading.chat[selectedId] : undefined;
+  const scriptId = receipt?.script_id ?? selected?.script_id;
+  const version = receipt?.version;
+  const session = loaded?.session.contact_id === selectedId && loaded?.session.script_id === scriptId ? loaded.session : null;
+  const currentNode = session?.current_node;
+  const pendingText = pending?.contactId === selectedId && pending?.scriptId === scriptId ? pending.text : null;
+  const selectionRef = useRef(selectedId);
+  selectionRef.current = selectedId;
 
   const openContact = (contact: ChatContact) => {
     setSelectedContactId(contact.id);
     setToast(null);
-    Promise.all([
-      chatApi.getChatScript(contact.script_id),
-      chatApi.getCurrentNode(contact.script_id),
-    ]).then(([s, node]) => {
-      setScript(s);
-      setCurrentNode(node);
-    });
   };
 
   useEffect(() => {
-    if (list.length > 0 && !selectedContactId) {
-      openContact(list[0]);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [list.length]);
+    if (incomingCall && isActive && readFilter === 'all') setSelectedContactId('boss');
+  }, [incomingCall, isActive, readFilter]);
 
   useEffect(() => {
-    if (!incomingCall) return;
-    const bossContact = list.find((c) => c.kind === 'boss');
-    if (bossContact) {
-      Promise.all([
-        chatApi.getChatScript(incomingCall.script_id),
-        chatApi.getCurrentNode(incomingCall.script_id),
-      ]).then(([s, node]) => {
-        setSelectedContactId('boss');
-        setScript(s);
-        setCurrentNode(node);
-      });
-    }
-    clearIncomingCall();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [incomingCall]);
+    if (!selectedId || !scriptId || !version) return;
+    let cancelled = false;
+    chatApi.getChatSession(selectedId, scriptId)
+      .then((session) => {
+        if (cancelled) return;
+        setLoaded({ version, session });
+      }).catch(() => { if (!cancelled) setToast('消息加载失败，请点击重新加载'); });
+    return () => { cancelled = true; };
+  }, [selectedId, scriptId, version, reload]);
 
-  const handleAdvance = async (optionId: string | null) => {
-    if (!script) return;
-    const next = await chatApi.advanceChat(script.script_id, optionId);
-    setCurrentNode(next);
-    if (next.reveals_clue) setToast(`发现线索：${next.reveals_clue}`);
-    if (next.reveals_directive) {
-      setToast(`收到密令：${next.reveals_directive}`);
-      refetchDirectives();
+  useReadReceipt('chat', selectedId,
+    isActive && currentNode != null && currentNode.node_id === receipt?.node_id,
+    loaded?.version ?? '');
+
+  useEffect(() => {
+    if (isActive && selectedId === 'boss' && incomingCall && receipt?.is_read &&
+        loaded?.version === receipt.version && session?.script_id === incomingCall.script_id) {
+      clearIncomingCall();
+    }
+  }, [isActive, selectedId, incomingCall, receipt, loaded, session, clearIncomingCall]);
+
+  const handleAdvance = async (optionId: string) => {
+    if (!session || !loaded || sending.current) return;
+    const option = session.current_node.options.find((item) => item.option_id === optionId);
+    if (!option) return;
+    const contactId = session.contact_id;
+    sending.current = true;
+    setToast(null);
+    setPending({ contactId, scriptId: session.script_id, text: option.text });
+    try {
+      const result = await chatApi.advanceChatSession(contactId, session.script_id, optionId, session.current_node.node_id);
+      refreshReading();
+      if (selectionRef.current !== contactId) return;
+      setLoaded({ ...loaded, session: result });
+      const next = result.current_node;
+      if (next.reveals_clue) setToast(`发现线索：${next.reveals_clue}`);
+      if (next.reveals_directive) {
+        setToast(`收到密令：${next.reveals_directive}`);
+        refetchDirectives();
+      }
+    } catch {
+      refreshReading();
+      setReload((value) => value + 1);
+      if (selectionRef.current === contactId) setToast('回复未确认，正在同步聊天记录；请查看记录后重试。');
+    } finally {
+      sending.current = false;
+      setPending(null);
     }
   };
 
@@ -86,62 +115,58 @@ export function ChatApp() {
   };
 
   return (
-    <div className="chat-app">
-      <aside className="chat-sidebar">
-        <div className="chat-user">
-          <span className="avatar avatar--self">YOU</span>
-          <span>
-            <strong>Local User</strong>
-            <small>
-              <span className="presence" /> Available
-            </small>
-          </span>
-        </div>
-        <div className="section-label">CONTACTS</div>
-        {list.map((contact) => (
-          <button
-            key={contact.id}
-            className={selected?.id === contact.id ? 'is-selected' : ''}
-            onClick={() => openContact(contact)}
-          >
-            <span className="avatar">{contact.kind === 'boss' ? '领导' : contact.name.slice(0, 2)}</span>
-            <span>
-              <strong>{contact.name}</strong>
-              <small>
-                <span className="presence" /> Available
-              </small>
-            </span>
-          </button>
-        ))}
+    <div className="workspace-layout chat-layout">
+      <aside className="workspace-categories" aria-label="聊天分类">
+        <div className="section-label">聊天分类</div>
+        <ReadFilterTabs value={readFilter} onChange={(value) => { setReadFilter(value); setSelectedContactId(null); setLoaded(null); setToast(null); }} />
       </aside>
-      <section className="conversation">
-        <header>
-          <span className="avatar">{selected ? (selected.kind === 'boss' ? '领导' : selected.name.slice(0, 2)) : '--'}</span>
-          <span>
-            <strong>{selected?.name ?? '未选择联系人'}</strong>
-            <small>Direct connection • Encrypted</small>
-          </span>
-        </header>
-        {script && currentNode ? (
-          <DialogueTreeView script={script} currentNode={currentNode} onAdvance={handleAdvance} />
+      <nav className="candidate-directory" aria-label="聊天联系人目录">
+        <div className="candidate-directory-heading"><strong>联系人</strong><span>{filteredList.length} 位</span></div>
+        <div className="candidate-directory-list">
+          {filteredList.map((contact) => (
+            <button
+              key={contact.id}
+              className={`candidate-item chat-contact ${selected?.id === contact.id ? 'is-selected' : ''}`}
+              aria-current={selected?.id === contact.id ? 'true' : undefined}
+              onClick={() => openContact(contact)}
+            >
+              <span className="avatar">{contact.kind === 'boss' ? '领导' : contact.name.slice(0, 2)}</span>
+              <span>
+                <strong>{contact.name}</strong>
+                <small>
+                  {contact.kind === 'boss' ? '领导' : '候选人'}
+                </small>
+                <ReadStatus channel="chat" id={contact.id} />
+              </span>
+            </button>
+          ))}
+          {filteredList.length === 0 && <p className="filter-empty">暂无符合条件的会话</p>}
+        </div>
+      </nav>
+      <section className="conversation" aria-label="聊天内容">
+        {session && selected ? (
+          <DialogueTreeView session={session} contact={selected} pendingText={pendingText} busy={pending !== null} onAdvance={handleAdvance}>
+            {toast && (
+              <div className="directive-banner">{toast}</div>
+            )}
+            {selected?.kind === 'npc' && activeDirectives && activeDirectives.length > 0 && (
+              <div className="directive-banner" style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                <span>可执行密令：</span>
+                {activeDirectives.map((directive) => (
+                  <button
+                    key={directive.directive_id}
+                    className="default-button"
+                    onClick={() => handleExecuteDirective(directive.directive_id)}
+                  >
+                    {directive.action.action_type}
+                  </button>
+                ))}
+              </div>
+            )}
+          </DialogueTreeView>
         ) : (
-          <div className="message-list" />
-        )}
-        {toast && (
-          <div className="directive-banner">{toast}</div>
-        )}
-        {selected?.kind === 'npc' && activeDirectives && activeDirectives.length > 0 && (
-          <div className="directive-banner" style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-            <span>可执行密令：</span>
-            {activeDirectives.map((directive) => (
-              <button
-                key={directive.directive_id}
-                className="default-button"
-                onClick={() => handleExecuteDirective(directive.directive_id)}
-              >
-                {directive.action.action_type}
-              </button>
-            ))}
+          <div className="call-empty"><span aria-hidden="true">▣</span><h2>{selected ? '正在载入通话…' : '视频面谈'}</h2><p>{toast ?? '从左侧选择一位联系人，查看通话与聊天记录。'}</p>
+            {selected && <button className="default-button" onClick={() => { refreshReading(); setReload((value) => value + 1); }}>重新加载</button>}
           </div>
         )}
       </section>

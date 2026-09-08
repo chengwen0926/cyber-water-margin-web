@@ -5,6 +5,10 @@ export function listEmails(): Promise<Email[]> {
   return fetchApi<Email[]>('/api/email');
 }
 
+export function listDownloadedAttachments(): Promise<{ attachment_ids: string[] }> {
+  return fetchApi<{ attachment_ids: string[] }>('/api/email/downloaded');
+}
+
 export function getEmail(emailId: string): Promise<Email> {
   return fetchApi<Email>(`/api/email/${emailId}`);
 }

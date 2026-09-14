@@ -9,7 +9,13 @@ from models.settlement import DayResult, PenaltyRecord
 
 
 class PlayerSave(BaseModel):
+    desktop_items: list[dict] = Field(default_factory=list)
+    desktop_settings: dict = Field(default_factory=lambda: {'brightness': 100, 'icon_size': 64, 'motion': True})
+    archive_case_ids: list[str] | None = None
+    friend_case_ids: list[str] | None = None
+    archive_evidence: dict[str, list[dict]] = Field(default_factory=dict)
     read_receipts: dict[str, dict[str, str]] = Field(default_factory=dict)
+    handled_call_revision: int = 0
     chat_call_revision: int = 0
     latest_boss_script_id: str | None = None
     current_day: int = 0

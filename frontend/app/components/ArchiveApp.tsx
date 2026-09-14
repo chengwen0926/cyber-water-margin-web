@@ -1,5 +1,7 @@
 'use client';
 
+import { FileTile, readDrop, useFiles } from './FileSystem';
+import { FILE_MIME, workspaceApi, type Assessment, type LibraryRecord } from '@/lib/workspace';
 import { useEffect, useRef, useState } from 'react';
 import { archiveApi, reviewApi } from '@/lib/api';
 import type { ArchiveDetail, ArchiveSummary, CaseJudgement, Clue, ResumeField } from '@/lib/api';
@@ -32,11 +34,17 @@ function ResumePhoto({ src, name }: { src: string; name: string }) {
 }
 
 export function ArchiveApp({ isActive }: { isActive: boolean }) {
+  const files = useFiles();
+  const [collection, setCollection] = useState<'candidates' | 'library'>('candidates');
+  const [dragOver, setDragOver] = useState(false);
+  const [selectedRecord, setSelectedRecord] = useState<LibraryRecord | null>(null);
+  const {data: library} = useApi<LibraryRecord[]>(workspaceApi.library, []);
   const { entries } = useReading();
   const { refetchQueue, dataVersion } = useGame();
   const { data: summaries, loading, error: listError, refetch } = useApi<ArchiveSummary[]>(() => archiveApi.listArchive(), [dataVersion]);
-  const [readFilter, setReadFilter] = useState<ReadFilter>('all');
   const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
+  const {data: assessment, refetch: refreshAssessment} = useApi<Assessment | null>(() => selectedCaseId ? workspaceApi.assessment(selectedCaseId) : Promise.resolve(null), [selectedCaseId, dataVersion]);
+  const [readFilter, setReadFilter] = useState<ReadFilter>('all');
   const [detail, setDetail] = useState<ArchiveDetail | null>(null);
   const [detailLoading, setDetailLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -115,8 +123,14 @@ export function ArchiveApp({ isActive }: { isActive: boolean }) {
     }
   };
 
-  return (
-    <div className="archive-layout">
+  const assessmentView = assessment?.case_id === selectedCaseId ? assessment : null;
+  return <div className={`archive-workbench ${dragOver ? 'archive-workbench--dragover' : ''}`}
+    onDragOver={event => {if(event.dataTransfer.types.includes(FILE_MIME)){event.preventDefault();setDragOver(true);event.dataTransfer.dropEffect='copy';}}}
+    onDragLeave={event => {if (!event.currentTarget.contains(event.relatedTarget as Node)) setDragOver(false);}}
+    onDrop={async event => {event.preventDefault();event.stopPropagation();setDragOver(false);const payload=readDrop(event);if(!payload?.source)return;const source=payload.source;const result=await files.run('正在提取信息并评估风险…',()=>workspaceApi.import(source,source.kind==='resume'?undefined:selectedCaseId??undefined));if(result){setCollection('candidates');setSelectedCaseId(result.case_id);setRetry(v=>v+1);refetch();refreshAssessment();}}}>
+    <header className="archive-command-bar"><div><strong>集团档案库</strong><small>材料归档 · 交叉核验 · 历史资料</small></div><label className="archive-search-shell"><input disabled placeholder="搜索人物、档案或事件（即将开放）" aria-label="档案搜索，暂未开放" /></label></header>
+    <div className="archive-collection-tabs"><button className={collection==='candidates'?'is-active':''} onClick={()=>setCollection('candidates')}>候选人档案 · {list.length}</button><button className={collection==='library'?'is-active':''} onClick={()=>setCollection('library')}>集团人物与事件 · {library?.length??0}</button><span>拖入简历建档；其他材料归入当前候选人</span></div>
+    {collection==='library' ? <div className="company-library"><nav aria-label="集团历史档案">{library?.map(record=><button key={record.id} className={selectedRecord?.id===record.id?'is-selected':''} onClick={()=>setSelectedRecord(record)}><small>{record.kind} · {record.date}</small><strong>{record.title}</strong></button>)}</nav><article>{selectedRecord?<><p className="file-eyebrow">集团历史档案 · {selectedRecord.kind}</p><h1>{selectedRecord.title}</h1><p className="file-body">{selectedRecord.body}</p><FileTile name="历史档案原件" source={{kind:'history',id:selectedRecord.id}} /><p>可保存到桌面，作为人物背景材料归档。历史资料不替代候选人的核验原件。</p></>:<div className="resume-empty"><h2>集团的过去，留在档案里</h2><p>从左侧选择人物、事件或内部新闻。</p></div>}</article></div> : <div className="archive-layout">
       <aside className="archive-sidebar" aria-label="档案分类">
         <div className="section-label">档案分类</div>
         <ReadFilterTabs value={readFilter} onChange={(value) => { setReadFilter(value); setSelectedCaseId(null); }} />
@@ -133,7 +147,7 @@ export function ArchiveApp({ isActive }: { isActive: boolean }) {
             <ReadStatus channel="archive" id={item.case_id} />
           </button>)}
           {loading && <p className="filter-empty">加载目录中…</p>}
-          {!loading && !listError && filteredList.length === 0 && <p className="filter-empty">{list.length ? '此分类下暂无档案' : '请先在邮箱下载简历附件'}</p>}
+          {!loading && !listError && filteredList.length === 0 && <p className="filter-empty">{list.length ? '此分类下暂无档案' : '将简历附件拖到这里，建立候选人档案'}</p>}
           {!!listError && <div className="filter-empty" role="alert">目录加载失败<button className="default-button" onClick={refetch}>重试</button></div>}
         </div>
       </nav>
@@ -149,6 +163,8 @@ export function ArchiveApp({ isActive }: { isActive: boolean }) {
               </div>
               <ResumePhoto key={resume.photo.photo_url} src={resume.photo.photo_url} name={activeSummary.npc_name} />
             </header>
+            <div className="archive-contact-line">联系方式：<strong>{activeSummary.npc_id}@localnet</strong><button onClick={()=>void files.run('正在添加好友…',()=>workspaceApi.friend(`${activeSummary.npc_id}@localnet`))}>添加好友</button></div>
+            {assessmentView && <section className="risk-assessment" aria-label="档案风险评估"><h3>材料核验评估</h3><div className="risk-counters"><span><b>{assessmentView.unknown}</b> 待核实</span><span><b>{assessmentView.conflicts}</b> 材料矛盾</span><span><b>{assessmentView.verified}</b> 已一致</span></div><p>{assessmentView.summary}</p><div className="risk-points">{assessmentView.points.map(point=><div key={point.key} className={`risk-point risk-point--${point.status}`}><strong>{point.label}</strong><span>{point.status==='unknown'?'待核实':point.status==='conflict'?'存在矛盾':'已核实一致'}</span>{point.status==='conflict'&&<small>简历：{point.declared} / 原件：{point.verified}</small>}</div>)}</div><div className="archive-evidence-tray"><strong>已归档材料 · {assessmentView.evidence.length}</strong><p>将核验原件、对话记录或背景材料拖到此窗口。</p>{assessmentView.evidence.map(doc=><span className="evidence-chip" key={`${doc.source.kind}:${doc.source.id}`}>{doc.title}</span>)}</div></section>}
             <div className="resume-body">
               {sections.map((section) => <ResumeSection key={section.title} title={section.title} fields={resume.fields.filter((field) => section.keys.includes(field.key))} />)}
               <ResumeSection title="其他资料" fields={resume.fields.filter((field) => !sections.some((section) => section.keys.includes(field.key)))} />
@@ -181,6 +197,7 @@ export function ArchiveApp({ isActive }: { isActive: boolean }) {
           {error && <button className="default-button" onClick={() => setRetry((value) => value + 1)}>重新加载</button>}
         </div>}
       </section>
-    </div>
-  );
+    </div>}
+    {dragOver && <div className="archive-drop-indicator">松开鼠标，提取材料并更新档案评估</div>}
+  </div>;
 }

@@ -1,0 +1,53 @@
+{
+  "npc_id": "npc_3_1",
+  "npc_name": "阮小七1",
+  "npc_level": "intern",
+  "archetype": "confident_liar",
+  "is_risk_target": false,
+  "avatar": "/avatars/confident_liar.png",
+  "medical_fields": [
+    {
+      "key": "gender",
+      "label": "性别",
+      "value": "男",
+      "is_falsified": false,
+      "conflict_source": null
+    },
+    {
+      "key": "health_status",
+      "label": "健康状况",
+      "value": "隐瞒病史",
+      "is_falsified": false,
+      "conflict_source": null
+    },
+    {
+      "key": "marital_status",
+      "label": "婚姻状况",
+      "value": "已婚",
+      "is_falsified": false,
+      "conflict_source": null
+    },
+    {
+      "key": "graduation_year",
+      "label": "毕业年份",
+      "value": "2019",
+      "is_falsified": false,
+      "conflict_source": null
+    },
+    {
+      "key": "criminal_record",
+      "label": "犯罪记录",
+      "value": "无犯罪记录",
+      "is_falsified": false,
+      "conflict_source": null
+    },
+    {
+      "key": "prior_employment",
+      "label": "过往履历",
+      "value": "首次求职",
+      "is_falsified": false,
+      "conflict_source": null
+    }
+  ],
+  "medical_report_scan_url": "/scans/npc_3_1.png"
+}

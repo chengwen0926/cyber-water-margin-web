@@ -30,7 +30,7 @@ def test_advance_sends_one_complete_mail(mail_storage, monkeypatch):
     assert emails[0].email_id == 'email_daily_1'
     assert '今日审查规则' in emails[0].body
     assert schedule.review_rules[0].description in emails[0].body
-    assert '请下载后前往档案系统查阅' in emails[0].body
+    assert '请双击查看原件，或拖入档案系统建立档案' in emails[0].body
     assert [a.case_id for a in emails[0].attachments] == [c.case_id for c in result.cases]
 
 

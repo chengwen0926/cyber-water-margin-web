@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { FileTile } from './FileSystem';
+import { useState } from 'react';
 
 import { emailApi } from '@/lib/api';
 import type { Email } from '@/lib/api';
@@ -11,15 +12,9 @@ import { useGame } from './GameProvider';
 export function EmailApp({ isActive }: { isActive: boolean }) {
   const [readFilter, setReadFilter] = useState<ReadFilter>('all');
   const { entries } = useReading();
-  const { refetchQueue, dataVersion } = useGame();
+  const { dataVersion } = useGame();
   const { data: emails, loading, refetch } = useApi<Email[]>(() => emailApi.listEmails(), [dataVersion]);
-  const { data: savedDownloads, refetch: refetchDownloads } = useApi<{ attachment_ids: string[] }>(() => emailApi.listDownloadedAttachments(), [dataVersion]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [downloaded, setDownloaded] = useState<Set<string>>(new Set());
-
-  useEffect(() => {
-    if (savedDownloads) setDownloaded(new Set(savedDownloads.attachment_ids));
-  }, [savedDownloads]);
 
   const list = emails ?? [];
   const filteredList = list.filter((item) => readFilter === 'all' ||
@@ -28,13 +23,6 @@ export function EmailApp({ isActive }: { isActive: boolean }) {
   const selected = list.find((item) => item.email_id === selectedId) ?? null;
 
   useReadReceipt('email', selected?.email_id ?? null, isActive && selected !== null);
-
-  const handleDownload = async (emailId: string, attachmentId: string) => {
-    await emailApi.downloadAttachment(emailId, attachmentId);
-    setDownloaded((prev) => new Set(prev).add(attachmentId));
-    refetchDownloads();
-    refetchQueue();
-  };
 
   return (
     <div className="workspace-layout mail-layout">
@@ -73,24 +61,8 @@ export function EmailApp({ isActive }: { isActive: boolean }) {
                 {selected.attachments.length > 0 && (
                   <div>
                     <p style={{ fontWeight: 500 }}>附件：</p>
-                    {selected.attachments.map((attachment) => {
-                      const isDownloaded = downloaded.has(attachment.attachment_id);
-                      return (
-                        <div
-                          key={attachment.attachment_id}
-                          className="mail-attachment"
-                        >
-                          <span>{attachment.filename}</span>
-                          <button
-                            className="default-button"
-                            disabled={isDownloaded}
-                            onClick={() => handleDownload(selected.email_id, attachment.attachment_id)}
-                          >
-                            {isDownloaded ? '已下载' : '下载'}
-                          </button>
-                        </div>
-                      );
-                    })}
+                    <p className="attachment-instructions">双击查看原件 · 拖到桌面保存 · 拖到档案建立档案</p>
+                    <div className="attachment-file-grid">{selected.attachments.map(attachment => <FileTile key={attachment.attachment_id} name={attachment.filename} source={{kind:'resume',id:attachment.case_id}} />)}</div>
                   </div>
                 )}
               </>

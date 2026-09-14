@@ -15,6 +15,8 @@ def legacy_session_key(contact_id: str, script_id: str) -> str:
 def node_id(save: PlayerSave, contact_id: str, script: ChatScript) -> str:
     revision = save.chat_call_revision if contact_id == "boss" else 0
     key = session_key(contact_id, script.script_id, revision)
+    if contact_id == "boss" and revision > 0:
+        return save.conversation_progress.get(key, script.start_node_id)
     return save.conversation_progress.get(key, save.conversation_progress.get(legacy_session_key(contact_id, script.script_id), save.chat_progress.get(script.script_id, script.start_node_id)))
 
 
@@ -29,8 +31,11 @@ def snapshot(save: PlayerSave, contact_id: str, script: ChatScript) -> ChatSessi
         # key. Preserve those transcripts when reading newer saves.
         messages = save.chat_transcripts.get(legacy_session_key(contact_id, script.script_id))
     if messages is None and contact_id == "boss":
-        previous = [message for old_key, items in save.chat_transcripts.items()
-                    if old_key.startswith('["boss",') for message in items]
+        # Each saved boss transcript already includes earlier calls. Use the
+        # latest cumulative transcript once, rather than duplicating every call.
+        previous = next((save.chat_transcripts[old_key]
+                         for old_key in reversed(save.chat_transcripts)
+                         if old_key.startswith('["boss",')), [])
         messages = [*previous, ChatMessage(speaker=node.speaker, text=node.text)]
     if not messages:
         messages = [ChatMessage(speaker=node.speaker, text=node.text)]

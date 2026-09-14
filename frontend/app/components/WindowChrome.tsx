@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, type PointerEvent, type ReactNode } from 'react';
 
-export type WindowId = 'archives' | 'email' | 'medical' | 'chat' | 'about' | 'notes' | 'trash';
+export type WindowId = 'archives' | 'email' | 'medical' | 'chat' | 'about' | 'notes' | 'trash' | 'meeting' | 'files' | 'preview' | 'settings';
 export type WindowState = {
   id: WindowId;
   title: string;
@@ -91,7 +91,7 @@ export function WindowChrome({ window: windowState, active, onClose, onFocus, on
   const finish = () => { gesture.current = null; };
 
   return (
-    <section ref={sectionRef} className={`mac-window ${active ? 'mac-window--active' : ''}`}
+    <section ref={sectionRef} className={`mac-window ${windowState.id === 'meeting' ? 'mac-window--meeting' : ''} ${active ? 'mac-window--active' : ''}`}
       style={{ left: windowState.left, top: windowState.top, width: windowState.width, height: windowState.height, zIndex: windowState.z }}
       onPointerDown={onFocus} onPointerMove={move} onPointerUp={finish} onPointerCancel={finish} onLostPointerCapture={finish} aria-label={windowState.title}>
       <div className="window-titlebar" onPointerDown={(event) => start(event)}>

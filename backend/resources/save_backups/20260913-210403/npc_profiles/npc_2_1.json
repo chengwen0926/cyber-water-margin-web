@@ -1,0 +1,53 @@
+{
+  "npc_id": "npc_2_1",
+  "npc_name": "吴用1",
+  "npc_level": "senior",
+  "archetype": "nervous_liar",
+  "is_risk_target": false,
+  "avatar": "/avatars/nervous_liar.png",
+  "medical_fields": [
+    {
+      "key": "gender",
+      "label": "性别",
+      "value": "女",
+      "is_falsified": false,
+      "conflict_source": null
+    },
+    {
+      "key": "health_status",
+      "label": "健康状况",
+      "value": "体检合格",
+      "is_falsified": false,
+      "conflict_source": null
+    },
+    {
+      "key": "marital_status",
+      "label": "婚姻状况",
+      "value": "未婚",
+      "is_falsified": false,
+      "conflict_source": null
+    },
+    {
+      "key": "graduation_year",
+      "label": "毕业年份",
+      "value": "2021",
+      "is_falsified": false,
+      "conflict_source": null
+    },
+    {
+      "key": "criminal_record",
+      "label": "犯罪记录",
+      "value": "有犯罪记录",
+      "is_falsified": false,
+      "conflict_source": null
+    },
+    {
+      "key": "prior_employment",
+      "label": "过往履历",
+      "value": "有过跳槽记录",
+      "is_falsified": false,
+      "conflict_source": null
+    }
+  ],
+  "medical_report_scan_url": "/scans/npc_2_1.png"
+}

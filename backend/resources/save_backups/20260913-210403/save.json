@@ -1,0 +1,768 @@
+{
+  "desktop_items": [
+    {
+      "id": "011737d8-e8a1-40ff-aafc-9ce7866dc1d8",
+      "kind": "file",
+      "name": "花荣0 · 个人简历",
+      "parent_id": null,
+      "deleted": false,
+      "source": {
+        "kind": "resume",
+        "id": "case_1_0"
+      }
+    },
+    {
+      "id": "508b70d9-465e-455a-bfbd-caff7fe04068",
+      "kind": "file",
+      "name": "梁山整编计划",
+      "parent_id": null,
+      "deleted": false,
+      "source": {
+        "kind": "history",
+        "id": "event-restructure"
+      }
+    }
+  ],
+  "desktop_settings": {
+    "brightness": 100,
+    "icon_size": 64,
+    "motion": true
+  },
+  "archive_case_ids": [
+    "case_1_0",
+    "case_1_1",
+    "case_1_2",
+    "case_2_0",
+    "case_2_1",
+    "case_2_2",
+    "case_3_0",
+    "case_3_1",
+    "case_3_2",
+    "case_4_0",
+    "case_4_1",
+    "case_4_2"
+  ],
+  "friend_case_ids": [
+    "case_1_0",
+    "case_1_1",
+    "case_1_2",
+    "case_2_0",
+    "case_2_1",
+    "case_2_2",
+    "case_3_0",
+    "case_3_1",
+    "case_3_2",
+    "case_4_0",
+    "case_4_1",
+    "case_4_2"
+  ],
+  "archive_evidence": {
+    "case_1_0": [
+      {
+        "source": {
+          "kind": "resume",
+          "id": "case_1_0"
+        },
+        "title": "花荣0 · 个人简历",
+        "case_id": "case_1_0",
+        "fields": [
+          {
+            "key": "gender",
+            "label": "性别",
+            "value": "女"
+          },
+          {
+            "key": "health_status",
+            "label": "健康状况",
+            "value": "体检合格"
+          },
+          {
+            "key": "marital_status",
+            "label": "婚姻状况",
+            "value": "已婚"
+          },
+          {
+            "key": "graduation_year",
+            "label": "毕业年份",
+            "value": "2022"
+          },
+          {
+            "key": "criminal_record",
+            "label": "犯罪记录",
+            "value": "无犯罪记录"
+          },
+          {
+            "key": "prior_employment",
+            "label": "过往履历",
+            "value": "首次求职"
+          }
+        ],
+        "body": "候选人自述材料，信息有待独立核实。",
+        "contact": "npc_1_0@localnet",
+        "name": "花荣0"
+      },
+      {
+        "source": {
+          "kind": "medical",
+          "id": "case_1_0"
+        },
+        "title": "花荣0 · 核验原件",
+        "case_id": "case_1_0",
+        "fields": [
+          {
+            "key": "gender",
+            "label": "性别",
+            "value": "男"
+          },
+          {
+            "key": "health_status",
+            "label": "健康状况",
+            "value": "隐瞒病史"
+          },
+          {
+            "key": "marital_status",
+            "label": "婚姻状况",
+            "value": "已婚"
+          },
+          {
+            "key": "graduation_year",
+            "label": "毕业年份",
+            "value": "2022"
+          },
+          {
+            "key": "criminal_record",
+            "label": "犯罪记录",
+            "value": "有犯罪记录"
+          },
+          {
+            "key": "prior_employment",
+            "label": "过往履历",
+            "value": "首次求职"
+          }
+        ],
+        "body": "医疗库提供的原始登记资料。请结合各项资料与当天审查规则判断。",
+        "contact": "npc_1_0@localnet",
+        "name": "花荣0"
+      }
+    ],
+    "case_1_1": [
+      {
+        "source": {
+          "kind": "medical",
+          "id": "case_1_1"
+        },
+        "title": "柴进1 · 核验原件",
+        "case_id": "case_1_1",
+        "fields": [
+          {
+            "key": "gender",
+            "label": "性别",
+            "value": "男"
+          },
+          {
+            "key": "health_status",
+            "label": "健康状况",
+            "value": "轻度贫血"
+          },
+          {
+            "key": "marital_status",
+            "label": "婚姻状况",
+            "value": "未婚"
+          },
+          {
+            "key": "graduation_year",
+            "label": "毕业年份",
+            "value": "2019"
+          },
+          {
+            "key": "criminal_record",
+            "label": "犯罪记录",
+            "value": "无犯罪记录"
+          },
+          {
+            "key": "prior_employment",
+            "label": "过往履历",
+            "value": "曾被辞退"
+          }
+        ],
+        "body": "医疗库提供的原始登记资料。请结合各项资料与当天审查规则判断。",
+        "contact": "npc_1_1@localnet",
+        "name": "柴进1"
+      }
+    ]
+  },
+  "read_receipts": {
+    "chat": {
+      "boss": "5:boss_call_checkin_01:end:5",
+      "case_1_0": "1:npc_nervous_liar_staff_risk:end:0",
+      "case_1_1": "1:npc_confident_liar_intern_normal:end:0",
+      "case_2_0": "2:npc_honest_intern_normal:end:0",
+      "case_2_1": "2:npc_nervous_liar_staff_risk:end:0",
+      "case_2_2": "2:npc_confident_liar_intern_normal:end:0",
+      "case_3_1": "3:npc_confident_liar_intern_normal:end:0",
+      "case_3_0": "3:npc_nervous_liar_staff_risk:criminal:0",
+      "case_3_2": "3:npc_confident_liar_intern_normal:end:0",
+      "case_1_2": "npc_nervous_liar_staff_risk:end",
+      "case_4_0": "npc_honest_intern_normal:end",
+      "case_4_2": "npc_honest_intern_normal:health",
+      "case_4_1": "npc_nervous_liar_staff_risk:criminal"
+    },
+    "email": {
+      "email_daily_1": "1",
+      "email_daily_2": "1",
+      "email_daily_3": "1",
+      "email_daily_4": "1",
+      "email_daily_5": "1"
+    },
+    "archive": {
+      "case_1_0": "3",
+      "case_1_1": "2",
+      "case_1_2": "1",
+      "case_2_0": "1",
+      "case_2_1": "1",
+      "case_2_2": "1",
+      "case_3_0": "1",
+      "case_3_1": "1",
+      "case_3_2": "1",
+      "case_4_0": "1",
+      "case_4_2": "1",
+      "case_4_1": "1"
+    },
+    "medical": {
+      "npc_1_0": "1",
+      "npc_1_1": "1",
+      "npc_1_2": "1"
+    }
+  },
+  "chat_call_revision": 5,
+  "latest_boss_script_id": "boss_call_checkin_01",
+  "current_day": 5,
+  "unlocked_emails": [],
+  "downloaded_attachments": [
+    "attachment_case_1_0",
+    "attachment_case_1_1",
+    "attachment_case_1_2",
+    "attachment_case_2_0",
+    "attachment_case_2_1",
+    "attachment_case_2_2",
+    "attachment_case_3_0",
+    "attachment_case_3_1",
+    "attachment_case_3_2",
+    "attachment_case_4_0",
+    "attachment_case_4_1",
+    "attachment_case_4_2"
+  ],
+  "resume_field_flags": {},
+  "discovered_clues": [
+    "clue_case_1_0_photo",
+    "clue_nervous_health_dodge",
+    "clue_confident_prior_vague",
+    "clue_case_1_2_photo",
+    "clue_nervous_criminal_overreact",
+    "clue_case_2_1_photo",
+    "clue_case_3_0_photo",
+    "clue_case_1_0_gender",
+    "clue_case_1_0_health_status",
+    "clue_case_1_0_criminal_record",
+    "clue_case_1_1_gender"
+  ],
+  "chat_progress": {},
+  "conversation_progress": {
+    "[\"boss\",\"boss_call_checkin_01\"]": "end",
+    "[\"case_1_0\",\"npc_nervous_liar_staff_risk\"]": "end",
+    "[\"case_1_1\",\"npc_confident_liar_intern_normal\"]": "end",
+    "[\"case_2_0\",\"npc_honest_intern_normal\"]": "end",
+    "[\"case_2_1\",\"npc_nervous_liar_staff_risk\"]": "end",
+    "[\"case_2_2\",\"npc_confident_liar_intern_normal\"]": "end",
+    "[\"case_3_1\",\"npc_confident_liar_intern_normal\"]": "end",
+    "[\"case_3_0\",\"npc_nervous_liar_staff_risk\"]": "criminal",
+    "[\"case_3_2\",\"npc_confident_liar_intern_normal\"]": "end",
+    "[\"case_1_2\",\"npc_nervous_liar_staff_risk\",0]": "end",
+    "[\"case_4_0\",\"npc_honest_intern_normal\",0]": "end",
+    "[\"case_4_2\",\"npc_honest_intern_normal\",0]": "health",
+    "[\"case_4_1\",\"npc_nervous_liar_staff_risk\",0]": "criminal",
+    "[\"boss\",\"boss_call_checkin_01\",5]": "end"
+  },
+  "chat_transcripts": {
+    "[\"boss\",\"boss_call_checkin_01\"]": [
+      {
+        "speaker": "boss",
+        "text": "今天辛苦了，把该来的都查一遍，别放过任何一个隐瞒病史的。"
+      },
+      {
+        "speaker": "player",
+        "text": "明白，领导。"
+      },
+      {
+        "speaker": "boss",
+        "text": "嗯，去忙吧。"
+      }
+    ],
+    "[\"case_1_0\",\"npc_nervous_liar_staff_risk\"]": [
+      {
+        "speaker": "npc",
+        "text": "呃……你好，我、我是来面试正式员工岗位的。"
+      },
+      {
+        "speaker": "player",
+        "text": "问一下你的健康状况"
+      },
+      {
+        "speaker": "npc",
+        "text": "我、我身体挺好的……没什么大问题。"
+      },
+      {
+        "speaker": "player",
+        "text": "追问：体检报告能提供原件吗？"
+      },
+      {
+        "speaker": "npc",
+        "text": "这、这个……可能得过几天才能给你。"
+      },
+      {
+        "speaker": "player",
+        "text": "好的，我知道了。"
+      },
+      {
+        "speaker": "npc",
+        "text": "那、那我先挂了？"
+      }
+    ],
+    "[\"case_1_1\",\"npc_confident_liar_intern_normal\"]": [
+      {
+        "speaker": "npc",
+        "text": "您好，我各方面条件都很优秀，随时可以入职。"
+      },
+      {
+        "speaker": "player",
+        "text": "问一下之前的工作经历"
+      },
+      {
+        "speaker": "npc",
+        "text": "我之前在好几家大公司都做得很出色，都是主动离职的。"
+      },
+      {
+        "speaker": "player",
+        "text": "好的，谢谢。"
+      },
+      {
+        "speaker": "npc",
+        "text": "期待您的好消息！"
+      }
+    ],
+    "[\"case_2_0\",\"npc_honest_intern_normal\"]": [
+      {
+        "speaker": "npc",
+        "text": "你好，我是来面试实习岗位的，请问需要我补充什么材料吗？"
+      },
+      {
+        "speaker": "player",
+        "text": "问一下你的毕业时间"
+      },
+      {
+        "speaker": "npc",
+        "text": "我是去年毕业的，学校和专业都写在简历里了。"
+      },
+      {
+        "speaker": "player",
+        "text": "好的，谢谢配合。"
+      },
+      {
+        "speaker": "npc",
+        "text": "谢谢，期待您的回复。"
+      }
+    ],
+    "[\"case_2_1\",\"npc_nervous_liar_staff_risk\"]": [
+      {
+        "speaker": "npc",
+        "text": "呃……你好，我、我是来面试正式员工岗位的。"
+      },
+      {
+        "speaker": "player",
+        "text": "问一下有没有犯罪记录"
+      },
+      {
+        "speaker": "npc",
+        "text": "没、没有！绝对没有犯罪记录！"
+      },
+      {
+        "speaker": "player",
+        "text": "好的，我知道了。"
+      },
+      {
+        "speaker": "npc",
+        "text": "那、那我先挂了？"
+      }
+    ],
+    "[\"case_2_2\",\"npc_confident_liar_intern_normal\"]": [
+      {
+        "speaker": "npc",
+        "text": "您好，我各方面条件都很优秀，随时可以入职。"
+      },
+      {
+        "speaker": "player",
+        "text": "问一下之前的工作经历"
+      },
+      {
+        "speaker": "npc",
+        "text": "我之前在好几家大公司都做得很出色，都是主动离职的。"
+      },
+      {
+        "speaker": "player",
+        "text": "好的，谢谢。"
+      },
+      {
+        "speaker": "npc",
+        "text": "期待您的好消息！"
+      }
+    ],
+    "[\"case_3_1\",\"npc_confident_liar_intern_normal\"]": [
+      {
+        "speaker": "npc",
+        "text": "您好，我各方面条件都很优秀，随时可以入职。"
+      },
+      {
+        "speaker": "player",
+        "text": "问一下之前的工作经历"
+      },
+      {
+        "speaker": "npc",
+        "text": "我之前在好几家大公司都做得很出色，都是主动离职的。"
+      },
+      {
+        "speaker": "player",
+        "text": "好的，谢谢。"
+      },
+      {
+        "speaker": "npc",
+        "text": "期待您的好消息！"
+      }
+    ],
+    "[\"case_3_0\",\"npc_nervous_liar_staff_risk\"]": [
+      {
+        "speaker": "npc",
+        "text": "呃……你好，我、我是来面试正式员工岗位的。"
+      },
+      {
+        "speaker": "player",
+        "text": "问一下有没有犯罪记录"
+      },
+      {
+        "speaker": "npc",
+        "text": "没、没有！绝对没有犯罪记录！"
+      }
+    ],
+    "[\"case_3_2\",\"npc_confident_liar_intern_normal\"]": [
+      {
+        "speaker": "npc",
+        "text": "您好，我各方面条件都很优秀，随时可以入职。"
+      },
+      {
+        "speaker": "player",
+        "text": "问一下婚姻状况"
+      },
+      {
+        "speaker": "npc",
+        "text": "单身，没有任何家庭负担，可以全身心投入工作。"
+      },
+      {
+        "speaker": "player",
+        "text": "好的，谢谢。"
+      },
+      {
+        "speaker": "npc",
+        "text": "期待您的好消息！"
+      }
+    ],
+    "[\"case_1_2\",\"npc_nervous_liar_staff_risk\",0]": [
+      {
+        "speaker": "npc",
+        "text": "呃……你好，我、我是来面试正式员工岗位的。"
+      },
+      {
+        "speaker": "player",
+        "text": "问一下有没有犯罪记录"
+      },
+      {
+        "speaker": "npc",
+        "text": "没、没有！绝对没有犯罪记录！"
+      },
+      {
+        "speaker": "player",
+        "text": "好的，我知道了。"
+      },
+      {
+        "speaker": "npc",
+        "text": "那、那我先挂了？"
+      }
+    ],
+    "[\"case_4_0\",\"npc_honest_intern_normal\",0]": [
+      {
+        "speaker": "npc",
+        "text": "你好，我是来面试实习岗位的，请问需要我补充什么材料吗？"
+      },
+      {
+        "speaker": "player",
+        "text": "问一下你的毕业时间"
+      },
+      {
+        "speaker": "npc",
+        "text": "我是去年毕业的，学校和专业都写在简历里了。"
+      },
+      {
+        "speaker": "player",
+        "text": "好的，谢谢配合。"
+      },
+      {
+        "speaker": "npc",
+        "text": "谢谢，期待您的回复。"
+      }
+    ],
+    "[\"case_4_2\",\"npc_honest_intern_normal\",0]": [
+      {
+        "speaker": "npc",
+        "text": "你好，我是来面试实习岗位的，请问需要我补充什么材料吗？"
+      },
+      {
+        "speaker": "player",
+        "text": "问一下你的健康状况"
+      },
+      {
+        "speaker": "npc",
+        "text": "我身体一直很好，体检报告都是合格的，您可以去医疗库核实。"
+      }
+    ],
+    "[\"case_4_1\",\"npc_nervous_liar_staff_risk\",0]": [
+      {
+        "speaker": "npc",
+        "text": "呃……你好，我、我是来面试正式员工岗位的。"
+      },
+      {
+        "speaker": "player",
+        "text": "问一下有没有犯罪记录"
+      },
+      {
+        "speaker": "npc",
+        "text": "没、没有！绝对没有犯罪记录！"
+      }
+    ],
+    "[\"boss\",\"boss_call_checkin_01\",5]": [
+      {
+        "speaker": "boss",
+        "text": "今天辛苦了，把该来的都查一遍，别放过任何一个隐瞒病史的。"
+      },
+      {
+        "speaker": "player",
+        "text": "明白，领导。"
+      },
+      {
+        "speaker": "boss",
+        "text": "嗯，去忙吧。"
+      },
+      {
+        "speaker": "boss",
+        "text": "今天辛苦了，把该来的都查一遍，别放过任何一个隐瞒病史的。"
+      },
+      {
+        "speaker": "player",
+        "text": "明白，领导。"
+      },
+      {
+        "speaker": "boss",
+        "text": "嗯，去忙吧。"
+      }
+    ]
+  },
+  "case_verdicts": {
+    "case_1_0": "rejected",
+    "case_1_1": "rejected",
+    "case_1_2": "rejected",
+    "case_2_0": "rejected",
+    "case_2_1": "rejected",
+    "case_2_2": "approved",
+    "case_3_0": "rejected",
+    "case_3_1": "approved",
+    "case_3_2": "approved",
+    "case_4_0": "rejected",
+    "case_4_2": "rejected",
+    "case_4_1": "approved"
+  },
+  "active_directives": [],
+  "completed_directive_actions": {},
+  "day_results": {
+    "1": {
+      "day": 1,
+      "judgements": [
+        {
+          "case_id": "case_1_0",
+          "player_verdict": "rejected",
+          "correct_verdict": "rejected",
+          "is_correct": true
+        },
+        {
+          "case_id": "case_1_1",
+          "player_verdict": "rejected",
+          "correct_verdict": "approved",
+          "is_correct": false
+        },
+        {
+          "case_id": "case_1_2",
+          "player_verdict": "rejected",
+          "correct_verdict": "approved",
+          "is_correct": false
+        }
+      ],
+      "total_count": 3,
+      "error_count": 2,
+      "error_rate": 0.6666666666666666,
+      "directive_results": {},
+      "penalty_triggered": {
+        "day_triggered": 1,
+        "rule_id": "penalty_single_day",
+        "action": {
+          "action_type": "warning",
+          "action_payload": null,
+          "severity": 1
+        }
+      },
+      "is_final_day": false
+    },
+    "2": {
+      "day": 2,
+      "judgements": [
+        {
+          "case_id": "case_2_0",
+          "player_verdict": "rejected",
+          "correct_verdict": "rejected",
+          "is_correct": true
+        },
+        {
+          "case_id": "case_2_1",
+          "player_verdict": "rejected",
+          "correct_verdict": "rejected",
+          "is_correct": true
+        },
+        {
+          "case_id": "case_2_2",
+          "player_verdict": "approved",
+          "correct_verdict": "approved",
+          "is_correct": true
+        }
+      ],
+      "total_count": 3,
+      "error_count": 0,
+      "error_rate": 0.0,
+      "directive_results": {},
+      "penalty_triggered": null,
+      "is_final_day": false
+    },
+    "3": {
+      "day": 3,
+      "judgements": [
+        {
+          "case_id": "case_3_0",
+          "player_verdict": "rejected",
+          "correct_verdict": "rejected",
+          "is_correct": true
+        },
+        {
+          "case_id": "case_3_1",
+          "player_verdict": "approved",
+          "correct_verdict": "rejected",
+          "is_correct": false
+        },
+        {
+          "case_id": "case_3_2",
+          "player_verdict": "approved",
+          "correct_verdict": "rejected",
+          "is_correct": false
+        }
+      ],
+      "total_count": 3,
+      "error_count": 2,
+      "error_rate": 0.6666666666666666,
+      "directive_results": {},
+      "penalty_triggered": {
+        "day_triggered": 3,
+        "rule_id": "penalty_single_day",
+        "action": {
+          "action_type": "warning",
+          "action_payload": null,
+          "severity": 1
+        }
+      },
+      "is_final_day": false
+    },
+    "4": {
+      "day": 4,
+      "judgements": [
+        {
+          "case_id": "case_4_0",
+          "player_verdict": "rejected",
+          "correct_verdict": "rejected",
+          "is_correct": true
+        },
+        {
+          "case_id": "case_4_1",
+          "player_verdict": "approved",
+          "correct_verdict": "approved",
+          "is_correct": true
+        },
+        {
+          "case_id": "case_4_2",
+          "player_verdict": "rejected",
+          "correct_verdict": "approved",
+          "is_correct": false
+        }
+      ],
+      "total_count": 3,
+      "error_count": 1,
+      "error_rate": 0.3333333333333333,
+      "directive_results": {},
+      "penalty_triggered": {
+        "day_triggered": 4,
+        "rule_id": "penalty_consecutive",
+        "action": {
+          "action_type": "salary_deduction",
+          "action_payload": {
+            "amount": 200
+          },
+          "severity": 2
+        }
+      },
+      "is_final_day": false
+    }
+  },
+  "penalty_records": [
+    {
+      "day_triggered": 1,
+      "rule_id": "penalty_single_day",
+      "action": {
+        "action_type": "warning",
+        "action_payload": null,
+        "severity": 1
+      }
+    },
+    {
+      "day_triggered": 3,
+      "rule_id": "penalty_single_day",
+      "action": {
+        "action_type": "warning",
+        "action_payload": null,
+        "severity": 1
+      }
+    },
+    {
+      "day_triggered": 4,
+      "rule_id": "penalty_consecutive",
+      "action": {
+        "action_type": "salary_deduction",
+        "action_payload": {
+          "amount": 200
+        },
+        "severity": 2
+      }
+    }
+  ],
+  "strikes": 3
+}

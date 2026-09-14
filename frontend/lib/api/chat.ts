@@ -32,3 +32,9 @@ export function advanceChatSession(contactId: string, scriptId: string, optionId
     method: 'POST', body: JSON.stringify({ script_id: scriptId, option_id: optionId, expected_node_id: expectedNodeId }),
   });
 }
+
+export function sendChatMessage(contactId: string, scriptId: string, text: string, expectedNodeId: string, expectedMessageCount: number): Promise<ChatSession> {
+  return fetchApi<ChatSession>(`/api/chat/sessions/${encodeURIComponent(contactId)}/messages`, {
+    method: 'POST', body: JSON.stringify({script_id:scriptId, text, expected_node_id:expectedNodeId, expected_message_count:expectedMessageCount}),
+  });
+}

@@ -197,7 +197,10 @@ export type ArchiveDetail = {
 };
 
 export type IncomingCallEvent = {
+  revision?: number;
   event: 'incoming_call';
+  contact_id?: string;
+  caller_name?: string;
   script_id: string;
 };
 

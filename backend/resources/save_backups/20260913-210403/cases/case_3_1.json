@@ -1,0 +1,61 @@
+{
+  "case_id": "case_3_1",
+  "npc_id": "npc_3_1",
+  "resume": {
+    "case_id": "case_3_1",
+    "fields": [
+      {
+        "key": "gender",
+        "label": "性别",
+        "value": "女",
+        "is_falsified": true,
+        "conflict_source": "npc_profile.medical_fields.gender"
+      },
+      {
+        "key": "health_status",
+        "label": "健康状况",
+        "value": "隐瞒病史",
+        "is_falsified": false,
+        "conflict_source": null
+      },
+      {
+        "key": "marital_status",
+        "label": "婚姻状况",
+        "value": "已婚",
+        "is_falsified": false,
+        "conflict_source": null
+      },
+      {
+        "key": "graduation_year",
+        "label": "毕业年份",
+        "value": "2019",
+        "is_falsified": false,
+        "conflict_source": null
+      },
+      {
+        "key": "criminal_record",
+        "label": "犯罪记录",
+        "value": "无犯罪记录",
+        "is_falsified": false,
+        "conflict_source": null
+      },
+      {
+        "key": "prior_employment",
+        "label": "过往履历",
+        "value": "首次求职",
+        "is_falsified": false,
+        "conflict_source": null
+      }
+    ],
+    "photo": {
+      "photo_url": "/resume_photos/case_3_1.png",
+      "is_anomalous": false,
+      "anomaly_note": null
+    },
+    "attachments": [
+      "case_3_1_resume.pdf"
+    ],
+    "downloaded": true
+  },
+  "chat_script_id": "npc_confident_liar_intern_normal"
+}

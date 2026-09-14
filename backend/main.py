@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from api import archive, chat, day, directives, email, events, medical, review, schedule, settlement
-from api import reading
+from api import reading, workspace
 from core.config import CORS_ORIGINS, ensure_save_exists
 
 app = FastAPI(title="赛博水浒入职日 API")
@@ -36,6 +36,7 @@ app.include_router(directives.router)
 app.include_router(settlement.router)
 app.include_router(events.router)
 app.include_router(reading.router)
+app.include_router(workspace.router)
 
 
 @app.get("/api/health")

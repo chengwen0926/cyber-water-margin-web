@@ -1,0 +1,21 @@
+{
+  "day": 3,
+  "entries": [
+    {
+      "position": 0,
+      "case_id": "case_3_0",
+      "arrival_state": "done"
+    },
+    {
+      "position": 1,
+      "case_id": "case_3_1",
+      "arrival_state": "done"
+    },
+    {
+      "position": 2,
+      "case_id": "case_3_2",
+      "arrival_state": "done"
+    }
+  ],
+  "generated_at_seed": 3
+}

@@ -1,0 +1,61 @@
+{
+  "case_id": "case_3_0",
+  "npc_id": "npc_3_0",
+  "resume": {
+    "case_id": "case_3_0",
+    "fields": [
+      {
+        "key": "gender",
+        "label": "性别",
+        "value": "男",
+        "is_falsified": true,
+        "conflict_source": "npc_profile.medical_fields.gender"
+      },
+      {
+        "key": "health_status",
+        "label": "健康状况",
+        "value": "体检合格",
+        "is_falsified": true,
+        "conflict_source": "npc_profile.medical_fields.health_status"
+      },
+      {
+        "key": "marital_status",
+        "label": "婚姻状况",
+        "value": "离异",
+        "is_falsified": false,
+        "conflict_source": null
+      },
+      {
+        "key": "graduation_year",
+        "label": "毕业年份",
+        "value": "2019",
+        "is_falsified": false,
+        "conflict_source": null
+      },
+      {
+        "key": "criminal_record",
+        "label": "犯罪记录",
+        "value": "无犯罪记录",
+        "is_falsified": false,
+        "conflict_source": null
+      },
+      {
+        "key": "prior_employment",
+        "label": "过往履历",
+        "value": "有过跳槽记录",
+        "is_falsified": false,
+        "conflict_source": null
+      }
+    ],
+    "photo": {
+      "photo_url": "/resume_photos/case_3_0.png",
+      "is_anomalous": true,
+      "anomaly_note": "照片人像与本人存在明显差异"
+    },
+    "attachments": [
+      "case_3_0_resume.pdf"
+    ],
+    "downloaded": true
+  },
+  "chat_script_id": "npc_nervous_liar_staff_risk"
+}

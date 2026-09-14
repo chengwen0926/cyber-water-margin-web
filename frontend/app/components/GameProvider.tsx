@@ -2,7 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 
-import { API_BASE_URL, dayApi } from '@/lib/api';
+import { API_BASE_URL, dayApi, fetchApi } from '@/lib/api';
 import type { DailyQueue, IncomingCallEvent } from '@/lib/api';
 
 type GameContextValue = {
@@ -76,7 +76,13 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     return () => source.close();
   }, []);
 
-  const clearIncomingCall = useCallback(() => setIncomingCall(null), []);
+  const clearIncomingCall = useCallback(() => {
+    const call = incomingCall;
+    if (!call?.revision) { setIncomingCall(null); return; }
+    void fetchApi('/api/events/call/ack', {method:'POST', body:JSON.stringify({revision:call.revision})})
+      .then(() => setIncomingCall(current => current?.revision === call.revision ? null : current))
+      .catch(() => { /* Keep the invitation available so the player can retry. */ });
+  }, [incomingCall]);
 
   const dayComplete =
     queue !== null &&

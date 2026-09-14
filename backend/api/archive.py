@@ -27,7 +27,7 @@ def list_archive() -> list[ArchiveSummary]:
     save = save_manager.read()
     summaries = []
     for case in case_loader.load_all():
-        if not case.resume.downloaded:
+        if (case.case_id not in save.archive_case_ids) if save.archive_case_ids is not None else (not case.resume.downloaded):
             continue
         try:
             profile = npc_loader.load(case.npc_id)

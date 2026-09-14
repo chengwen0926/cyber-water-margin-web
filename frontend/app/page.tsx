@@ -1,5 +1,8 @@
 'use client';
 
+import { FileSystemProvider, DesktopFiles, useFiles } from './components/FileSystem';
+import { FILE_MIME, workspaceApi } from '@/lib/workspace';
+import { readDrop } from './components/FileSystem';
 import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 
 import { settlementApi } from '@/lib/api';
@@ -9,6 +12,7 @@ import { ChatApp } from './components/ChatApp';
 import { EmailApp } from './components/EmailApp';
 import { GameOverModal } from './components/GameOverModal';
 import { GameProvider, useGame } from './components/GameProvider';
+import { IncomingCallModal } from './components/IncomingCallModal';
 import { ReadingProvider, useReading } from './components/ReadingProvider';
 import { MedicalApp } from './components/MedicalApp';
 import { SettlementModal } from './components/SettlementModal';
@@ -20,6 +24,8 @@ const APP_NAMES: Record<WindowId, string> = {
   email: '邮箱',
   medical: '医疗库',
   chat: '聊天',
+  meeting: '视频会议',
+  files: '桌面文件', preview: '文件预览', settings: '显示设置',
   about: 'About This Macintosh',
   notes: 'ReadMe',
   trash: 'Trash',
@@ -29,7 +35,8 @@ const initialWindows: WindowState[] = [
   { id: 'archives', title: APP_NAMES.archives, left: '10%', top: '17%', width: '960px', height: '580px', z: 3 },
   { id: 'email', title: APP_NAMES.email, left: '24%', top: '15%', width: '860px', height: '520px', z: 0 },
   { id: 'medical', title: APP_NAMES.medical, left: '18%', top: '18%', width: '860px', height: '520px', z: 0 },
-  { id: 'chat', title: APP_NAMES.chat, left: '20%', top: '17%', width: '900px', height: '610px', z: 0 },
+  { id: 'chat', title: APP_NAMES.chat, left: '12%', top: '12%', width: '1050px', height: '680px', z: 0 },
+  { id: 'meeting', title: APP_NAMES.meeting, left: '7%', top: '9%', width: '1180px', height: '700px', z: 0 },
   { id: 'about', title: APP_NAMES.about, left: '54%', top: '20%', width: '305px', height: '235px', z: 0 },
   { id: 'notes', title: APP_NAMES.notes, left: '25%', top: '58%', width: '315px', height: '205px', z: 0 },
   { id: 'trash', title: APP_NAMES.trash, left: '69%', top: '61%', width: '280px', height: '178px', z: 0 },
@@ -39,7 +46,8 @@ const menuItems = ['File', 'Edit', 'View', 'Special'];
 
 
 function DesktopShell() {
-  const { advanceDay, dayComplete, incomingCall } = useGame();
+  const files = useFiles();
+  const { advanceDay, dayComplete, incomingCall, clearIncomingCall } = useGame();
   const { entries: reading, error: readingError } = useReading();
   const chatUnreadCount = Object.values(reading.chat).filter((entry) => !entry.is_read).length;
   const [windows, setWindows] = useState(initialWindows);
@@ -49,6 +57,7 @@ function DesktopShell() {
   const [settlement, setSettlement] = useState<DayResult | null>(null);
   const [settling, setSettling] = useState(false);
   const [gameOver, setGameOver] = useState<{ finalDay: number } | null>(null);
+  const [meeting, setMeeting] = useState<{ contactId: string; key: number } | null>(null);
   const settledForCurrentDay = useRef(false);
 
   useEffect(() => {
@@ -76,11 +85,22 @@ function DesktopShell() {
     setActiveWindow(id);
     setWindows((current) => current.map((item) => (item.id === id ? { ...item, z: highest + 1 } : item)));
   };
-  const closeWindow = (id: WindowId) => setWindows((current) => current.map((item) => (item.id === id ? { ...item, z: 0 } : item)));
+  const closeWindow = (id: WindowId) => {
+    if (id === 'meeting') setMeeting(null);
+    if (activeWindow === id) {
+      const next = windows.filter(item => item.id !== id && item.z > 0).sort((a, b) => b.z - a.z)[0];
+      if (next) setActiveWindow(next.id);
+    }
+    setWindows(current => current.map(item => item.id === id ? { ...item, z: 0 } : item));
+  };
   const openWindow = (id: WindowId) => {
     const highest = Math.max(...windows.map((item) => item.z), 0);
     setActiveWindow(id);
     setWindows((current) => current.map((item) => (item.id === id ? { ...item, z: highest + 1 } : item)));
+  };
+  const startMeeting = (contactId: string, newCall = false) => {
+    if (newCall || meeting?.contactId !== contactId) setMeeting({ contactId, key: Date.now() });
+    openWindow('meeting');
   };
   const updateWindowBounds = (id: WindowId, bounds: Pick<WindowState, 'left' | 'top' | 'width' | 'height'>) => {
     setWindows((current) => current.map((item) => item.id === id ? { ...item, ...bounds } : item));
@@ -111,17 +131,18 @@ function DesktopShell() {
 
       {openMenu === 'Apple' && (
         <div className="dropdown-menu" role="menu" onClick={(event) => event.stopPropagation()}>
-          {['About This Macintosh', 'Control Panels', 'Key Caps', 'Shut Down...'].map((entry) => <button type="button" role="menuitem" key={entry} onClick={() => { if (entry === 'About This Macintosh') openWindow('about'); setOpenMenu(null); }}>{entry}</button>)}
+          {['About This Macintosh', 'Control Panels', 'Key Caps', 'Shut Down...'].map((entry) => <button type="button" role="menuitem" key={entry} onClick={() => { if (entry === 'About This Macintosh') openWindow('about'); if (entry === 'Control Panels') files.openSettings(); setOpenMenu(null); }}>{entry}</button>)}
         </div>
       )}
 
+      <DesktopFiles />
       <div className="desktop-icons" aria-label="Desktop applications">
         <button className="desktop-icon desktop-icon--notes" onDoubleClick={() => openWindow('notes')}><Icon type="note" /><span>{APP_NAMES.notes}</span></button>
         <button className="desktop-icon desktop-icon--email" onDoubleClick={() => openWindow('email')}><Icon type="email" /><span>{APP_NAMES.email}</span></button>
-        <button className="desktop-icon desktop-icon--archives" onDoubleClick={() => openWindow('archives')}><Icon type="archive" /><span>{APP_NAMES.archives}</span></button>
+        <button className="desktop-icon desktop-icon--archives" onDragOver={e => {if (e.dataTransfer.types.includes(FILE_MIME)) e.preventDefault();}} onDrop={e => {e.preventDefault();e.stopPropagation();const payload = readDrop(e);if (payload?.source) {void files.run('正在建立档案…', () => workspaceApi.import(payload.source!));openWindow('archives');}}} onDoubleClick={() => openWindow('archives')}><Icon type="archive" /><span>{APP_NAMES.archives}</span></button>
         <button className="desktop-icon desktop-icon--medical" onDoubleClick={() => openWindow('medical')}><Icon type="medical" /><span>{APP_NAMES.medical}</span></button>
         <button className="desktop-icon desktop-icon--chat" onDoubleClick={() => openWindow('chat')}><Icon type="chat" />{(chatUnreadCount > 0 || incomingCall) && <span className="desktop-badge" role="status" aria-label={`聊天有 ${chatUnreadCount || 1} 条未读内容`}>{chatUnreadCount || 1}</span>}<span>{APP_NAMES.chat}</span></button>
-        <button className="desktop-icon desktop-icon--trash" onDoubleClick={() => openWindow('trash')}><Icon type="trash" /><span>Trash</span></button>
+        <button className="desktop-icon desktop-icon--trash" onDoubleClick={files.openTrash}><Icon type="trash" /><span>Trash</span></button>
       </div>
 
       <div className="desktop-windows">
@@ -130,7 +151,8 @@ function DesktopShell() {
             {windowState.id === 'archives' && <ArchiveApp isActive={activeWindow === 'archives'} />}
             {windowState.id === 'email' && <EmailApp isActive={activeWindow === 'email'} />}
             {windowState.id === 'medical' && <MedicalApp isActive={activeWindow === 'medical'} />}
-            {windowState.id === 'chat' && <ChatApp isActive={activeWindow === 'chat'} />}
+            {windowState.id === 'chat' && <ChatApp isActive={activeWindow === 'chat' && !incomingCall} onVideoCall={startMeeting} />}
+            {windowState.id === 'meeting' && meeting && <ChatApp key={meeting.key} isActive={activeWindow === 'meeting' && !incomingCall} meetingContactId={meeting.contactId} onHangUp={() => closeWindow('meeting')} />}
             {windowState.id === 'about' && <div className="about-window"><Icon type="mac" /><h1>赛博水浒入职日</h1><p className="version">System Software 7.5.5</p><div className="about-rule" /><p className="copyright">Copyright © 1996</p><button className="default-button" onClick={() => closeWindow('about')}>OK</button></div>}
             {windowState.id === 'notes' && <div className="notes-window"><p className="notes-heading">欢迎来到人事审查系统。</p><p>双击图标打开对应软件：邮箱、档案、医疗库、聊天。</p><p className="notes-signoff">- 系统管理员</p></div>}
             {windowState.id === 'trash' && <div className="trash-window"><Icon type="trash" /><p>Trash is empty.</p><button className="default-button" onClick={() => closeWindow('trash')}>Close</button></div>}
@@ -138,6 +160,14 @@ function DesktopShell() {
         ))}
 
       </div>
+
+      {incomingCall && (
+        <IncomingCallModal
+          call={incomingCall}
+          onDecline={clearIncomingCall}
+          onAnswer={() => { startMeeting(incomingCall.contact_id ?? 'boss', true); clearIncomingCall(); }}
+        />
+      )}
 
       {settlement && (
         <SettlementModal result={settlement} onClose={handleContinueToNextDay} />
@@ -188,7 +218,7 @@ export default function Home() {
 
   return (
     <GameProvider>
-      <ReadingProvider><DesktopShell /></ReadingProvider>
+      <ReadingProvider><FileSystemProvider><DesktopShell /></FileSystemProvider></ReadingProvider>
     </GameProvider>
   );
 }

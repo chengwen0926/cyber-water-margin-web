@@ -1,0 +1,53 @@
+{
+  "npc_id": "npc_2_2",
+  "npc_name": "花荣2",
+  "npc_level": "senior",
+  "archetype": "confident_liar",
+  "is_risk_target": false,
+  "avatar": "/avatars/confident_liar.png",
+  "medical_fields": [
+    {
+      "key": "gender",
+      "label": "性别",
+      "value": "男",
+      "is_falsified": false,
+      "conflict_source": null
+    },
+    {
+      "key": "health_status",
+      "label": "健康状况",
+      "value": "轻度贫血",
+      "is_falsified": false,
+      "conflict_source": null
+    },
+    {
+      "key": "marital_status",
+      "label": "婚姻状况",
+      "value": "已婚",
+      "is_falsified": false,
+      "conflict_source": null
+    },
+    {
+      "key": "graduation_year",
+      "label": "毕业年份",
+      "value": "2021",
+      "is_falsified": false,
+      "conflict_source": null
+    },
+    {
+      "key": "criminal_record",
+      "label": "犯罪记录",
+      "value": "有犯罪记录",
+      "is_falsified": false,
+      "conflict_source": null
+    },
+    {
+      "key": "prior_employment",
+      "label": "过往履历",
+      "value": "有过跳槽记录",
+      "is_falsified": false,
+      "conflict_source": null
+    }
+  ],
+  "medical_report_scan_url": "/scans/npc_2_2.png"
+}

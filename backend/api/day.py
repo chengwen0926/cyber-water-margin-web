@@ -23,7 +23,7 @@ def _daily_email(day: int, schedule, cases: list) -> Email:
             f"今日共有 {schedule.npc_count} 位候选人前来面试，"
             f"允许通过级别：{'、'.join(schedule.allowed_npc_levels)}。\n\n"
             f"今日审查规则：\n{rules or '无特殊规则'}\n\n"
-            "以下为今日待审查候选人的简历附件，请下载后前往档案系统查阅。"
+            "以下为今日待审查候选人的简历附件，请双击查看原件，或拖入档案系统建立档案。"
         ),
         attachments=[EmailAttachment(
             attachment_id=f"attachment_{case.case_id}", case_id=case.case_id,

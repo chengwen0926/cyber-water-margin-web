@@ -8,5 +8,17 @@ def publish_call(script_id: str) -> None:
         save.chat_call_revision += 1
         save.latest_boss_script_id = script_id
 
-    save_manager.update(mutate)
-    broadcaster.publish({"event": "incoming_call", "script_id": script_id})
+    save = save_manager.update(mutate)
+    broadcaster.publish(call_event(save))
+
+
+def call_event(save):
+    return {"event": "incoming_call", "script_id": save.latest_boss_script_id,
+            "revision": save.chat_call_revision, "contact_id": "boss", "caller_name": "领导"}
+
+
+def pending_call():
+    save = save_manager.read()
+    if save.latest_boss_script_id and save.chat_call_revision > save.handled_call_revision:
+        return call_event(save)
+    return None

@@ -1,5 +1,6 @@
 'use client';
 
+import { FileTile } from './FileSystem';
 import { useEffect, useState } from 'react';
 
 import { archiveApi, medicalApi } from '@/lib/api';
@@ -115,6 +116,7 @@ export function MedicalApp({ isActive }: { isActive: boolean }) {
                   </div>
                 )}
               </div>
+              {activeSummary && <div className="medical-evidence"><p>拖入候选人档案，补充核验依据</p><FileTile name={`${activeSummary.npc_name} · 核验原件`} source={{kind:'medical',id:activeSummary.case_id}} /></div>}
               <div className="record-actions">
                 <button onClick={handleCompare}>与简历比对</button>
               </div>

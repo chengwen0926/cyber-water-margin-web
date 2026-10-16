@@ -1,0 +1,61 @@
+{
+  "case_id": "case_2_0",
+  "npc_id": "npc_2_0",
+  "resume": {
+    "case_id": "case_2_0",
+    "fields": [
+      {
+        "key": "gender",
+        "label": "性别",
+        "value": "男",
+        "is_falsified": true,
+        "conflict_source": "npc_profile.medical_fields.gender"
+      },
+      {
+        "key": "health_status",
+        "label": "健康状况",
+        "value": "体检合格",
+        "is_falsified": false,
+        "conflict_source": null
+      },
+      {
+        "key": "marital_status",
+        "label": "婚姻状况",
+        "value": "未婚",
+        "is_falsified": true,
+        "conflict_source": "npc_profile.medical_fields.marital_status"
+      },
+      {
+        "key": "graduation_year",
+        "label": "毕业年份",
+        "value": "2021",
+        "is_falsified": false,
+        "conflict_source": null
+      },
+      {
+        "key": "criminal_record",
+        "label": "犯罪记录",
+        "value": "有犯罪记录",
+        "is_falsified": false,
+        "conflict_source": null
+      },
+      {
+        "key": "prior_employment",
+        "label": "过往履历",
+        "value": "首次求职",
+        "is_falsified": true,
+        "conflict_source": "npc_profile.medical_fields.prior_employment"
+      }
+    ],
+    "photo": {
+      "photo_url": "/resume_photos/case_2_0.png",
+      "is_anomalous": false,
+      "anomaly_note": null
+    },
+    "attachments": [
+      "case_2_0_resume.pdf"
+    ],
+    "downloaded": false
+  },
+  "chat_script_id": "npc_honest_intern_normal"
+}

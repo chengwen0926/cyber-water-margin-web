@@ -1,5 +1,6 @@
 'use client';
 
+import { RestartGameButton } from './components/RestartGameButton';
 import { FileSystemProvider, DesktopFiles, useFiles } from './components/FileSystem';
 import { FILE_MIME, workspaceApi } from '@/lib/workspace';
 import { readDrop } from './components/FileSystem';
@@ -21,22 +22,22 @@ import type { WindowId, WindowState } from './components/WindowChrome';
 
 const APP_NAMES: Record<WindowId, string> = {
   archives: '档案',
-  email: '邮箱',
-  medical: '医疗库',
+  email: '邮件',
+  medical: '医疗数据库',
   chat: '聊天',
-  meeting: '视频会议',
+  meeting: '视频谈话',
   files: '桌面文件', preview: '文件预览', settings: '显示设置',
   about: 'About This Macintosh',
   notes: 'ReadMe',
-  trash: 'Trash',
+  trash: '回收站',
 };
 
 const initialWindows: WindowState[] = [
-  { id: 'archives', title: APP_NAMES.archives, left: '10%', top: '17%', width: '960px', height: '580px', z: 3 },
+  { id: 'archives', title: '集团档案库', left: '11.5%', top: '7%', width: '1060px', height: '650px', z: 3 },
   { id: 'email', title: APP_NAMES.email, left: '24%', top: '15%', width: '860px', height: '520px', z: 0 },
   { id: 'medical', title: APP_NAMES.medical, left: '18%', top: '18%', width: '860px', height: '520px', z: 0 },
   { id: 'chat', title: APP_NAMES.chat, left: '12%', top: '12%', width: '1050px', height: '680px', z: 0 },
-  { id: 'meeting', title: APP_NAMES.meeting, left: '7%', top: '9%', width: '1180px', height: '700px', z: 0 },
+  { id: 'meeting', title: APP_NAMES.meeting, left: '28%', top: '10%', width: '680px', height: '720px', z: 0 },
   { id: 'about', title: APP_NAMES.about, left: '54%', top: '20%', width: '305px', height: '235px', z: 0 },
   { id: 'notes', title: APP_NAMES.notes, left: '25%', top: '58%', width: '315px', height: '205px', z: 0 },
   { id: 'trash', title: APP_NAMES.trash, left: '69%', top: '61%', width: '280px', height: '178px', z: 0 },
@@ -124,6 +125,7 @@ function DesktopShell() {
         <nav className="menu-links" aria-label="Main menu">
           {menuItems.map((item) => <button type="button" key={item} className="menu-link" onClick={() => setOpenMenu(null)}>{item}</button>)}
         </nav>
+        <RestartGameButton disabled={settling || !!files.busy} />
         <div className="menubar-spacer" />
         {settling && <span className="menubar-status">正在结算今日工作...</span>}
         <span className="menubar-time">{time}</span>
@@ -142,7 +144,7 @@ function DesktopShell() {
         <button className="desktop-icon desktop-icon--archives" onDragOver={e => {if (e.dataTransfer.types.includes(FILE_MIME)) e.preventDefault();}} onDrop={e => {e.preventDefault();e.stopPropagation();const payload = readDrop(e);if (payload?.source) {void files.run('正在建立档案…', () => workspaceApi.import(payload.source!));openWindow('archives');}}} onDoubleClick={() => openWindow('archives')}><Icon type="archive" /><span>{APP_NAMES.archives}</span></button>
         <button className="desktop-icon desktop-icon--medical" onDoubleClick={() => openWindow('medical')}><Icon type="medical" /><span>{APP_NAMES.medical}</span></button>
         <button className="desktop-icon desktop-icon--chat" onDoubleClick={() => openWindow('chat')}><Icon type="chat" />{(chatUnreadCount > 0 || incomingCall) && <span className="desktop-badge" role="status" aria-label={`聊天有 ${chatUnreadCount || 1} 条未读内容`}>{chatUnreadCount || 1}</span>}<span>{APP_NAMES.chat}</span></button>
-        <button className="desktop-icon desktop-icon--trash" onDoubleClick={files.openTrash}><Icon type="trash" /><span>Trash</span></button>
+        <button className="desktop-icon desktop-icon--trash" onDoubleClick={files.openTrash}><Icon type="trash" /><span>{APP_NAMES.trash}</span></button>
       </div>
 
       <div className="desktop-windows">

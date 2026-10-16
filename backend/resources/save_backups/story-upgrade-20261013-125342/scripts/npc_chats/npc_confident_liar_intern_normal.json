@@ -1,0 +1,40 @@
+{
+  "script_id": "npc_confident_liar_intern_normal",
+  "participant": "npc",
+  "archetype_tags": ["intern", "confident_liar", "normal"],
+  "start_node_id": "start",
+  "nodes": {
+    "start": {
+      "node_id": "start",
+      "speaker": "npc",
+      "text": "您好，我各方面条件都很优秀，随时可以入职。",
+      "options": [
+        { "option_id": "ask_prior", "text": "问一下之前的工作经历", "next_node_id": "prior" },
+        { "option_id": "ask_marital", "text": "问一下婚姻状况", "next_node_id": "marital" }
+      ]
+    },
+    "prior": {
+      "node_id": "prior",
+      "speaker": "npc",
+      "text": "我之前在好几家大公司都做得很出色，都是主动离职的。",
+      "options": [
+        { "option_id": "continue", "text": "好的，谢谢。", "next_node_id": "end" }
+      ],
+      "reveals_clue": "clue_confident_prior_vague"
+    },
+    "marital": {
+      "node_id": "marital",
+      "speaker": "npc",
+      "text": "单身，没有任何家庭负担，可以全身心投入工作。",
+      "options": [
+        { "option_id": "continue", "text": "好的，谢谢。", "next_node_id": "end" }
+      ]
+    },
+    "end": {
+      "node_id": "end",
+      "speaker": "npc",
+      "text": "期待您的好消息！",
+      "options": []
+    }
+  }
+}

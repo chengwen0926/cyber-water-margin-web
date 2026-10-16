@@ -59,7 +59,7 @@ def list_contacts() -> list[ChatContact]:
         contacts.append(
             ChatContact(
                 id="boss",
-                name="领导",
+                name="高俅",
                 avatar="/avatars/boss.png",
                 kind="boss",
                 script_id=save.latest_boss_script_id or boss_scripts[0].script_id,

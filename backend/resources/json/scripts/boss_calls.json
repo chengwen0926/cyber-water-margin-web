@@ -2,7 +2,9 @@
   {
     "script_id": "boss_call_checkin_01",
     "participant": "boss",
-    "archetype_tags": ["boss"],
+    "archetype_tags": [
+      "boss"
+    ],
     "start_node_id": "start",
     "nodes": {
       "start": {
@@ -10,7 +12,11 @@
         "speaker": "boss",
         "text": "今天辛苦了，把该来的都查一遍，别放过任何一个隐瞒病史的。",
         "options": [
-          { "option_id": "ack", "text": "明白，领导。", "next_node_id": "end" }
+          {
+            "option_id": "ack",
+            "text": "明白，领导。",
+            "next_node_id": "end"
+          }
         ]
       },
       "end": {
@@ -24,7 +30,9 @@
   {
     "script_id": "boss_call_directive_01",
     "participant": "boss",
-    "archetype_tags": ["boss"],
+    "archetype_tags": [
+      "boss"
+    ],
     "start_node_id": "start",
     "nodes": {
       "start": {
@@ -32,7 +40,11 @@
         "speaker": "boss",
         "text": "跟你说个事，最近有人隐瞒犯罪记录混进来面试。你要是发现了，别声张，悄悄报给我。",
         "options": [
-          { "option_id": "ack", "text": "我知道了。", "next_node_id": "reveal" }
+          {
+            "option_id": "ack",
+            "text": "我知道了。",
+            "next_node_id": "reveal"
+          }
         ]
       },
       "reveal": {
@@ -41,6 +53,114 @@
         "text": "好，就这样，挂了。",
         "options": [],
         "reveals_directive": "directive_secret_report_criminal"
+      }
+    }
+  },
+  {
+    "script_id": "boss_gaoqiu_onboarding_01",
+    "participant": "boss",
+    "archetype_tags": [
+      "boss",
+      "onboarding"
+    ],
+    "start_node_id": "start",
+    "nodes": {
+      "start": {
+        "node_id": "start",
+        "speaker": "boss",
+        "text": "你，就是新来的员工吗？",
+        "options": [
+          {
+            "option_id": "calm",
+            "text": "是的（语气平淡）",
+            "next_node_id": "cold"
+          },
+          {
+            "option_id": "eager",
+            "text": "就是我！（充满干劲的语气）",
+            "next_node_id": "eager"
+          }
+        ]
+      },
+      "cold": {
+        "node_id": "cold",
+        "speaker": "boss",
+        "text": "真是一张毫无朝气的面孔，不禁让我想起2104年的冬天，我带领新东京队客场迎战大名队，比分落后整整50分，当时我的队友也是你这个表情。",
+        "options": [
+          {
+            "option_id": "listen",
+            "text": "……",
+            "next_node_id": "lesson"
+          },
+          {
+            "option_id": "skip",
+            "text": "我对体育不太了解",
+            "next_node_id": "skip_sports"
+          }
+        ]
+      },
+      "eager": {
+        "node_id": "eager",
+        "speaker": "boss",
+        "text": "真是一张朝气蓬勃的面孔，不禁让我想起2100年的夏天，我第一次踏上新东京体育馆的球场，当时我也是你这个表情。",
+        "options": [
+          {
+            "option_id": "listen",
+            "text": "……",
+            "next_node_id": "lesson"
+          },
+          {
+            "option_id": "skip",
+            "text": "我对体育不太了解",
+            "next_node_id": "skip_sports"
+          }
+        ]
+      },
+      "lesson": {
+        "node_id": "lesson",
+        "speaker": "boss",
+        "text": "……我从球场上学会的最重要的一件事，你在人生只有两种选择，要么当猎手，要么当猎物。我们打职业蹴鞠，重要的不是抓住那个球，而是找到人群中的软蛋，不管他们的面孔看起来有多神气，相信我，只要你死死盯住他们，一定会发现他们眼神里的恐惧，等他们躲闪的一刹那，那就是你赢得比赛的机会……\n\n说回工作吧，你听说昨天的恐怖袭击了吗？",
+        "options": [
+          {
+            "option_id": "unaware",
+            "text": "完全没听说",
+            "next_node_id": "unaware"
+          },
+          {
+            "option_id": "aware",
+            "text": "基本知悉",
+            "next_node_id": "aware"
+          }
+        ]
+      },
+      "skip_sports": {
+        "node_id": "skip_sports",
+        "speaker": "boss",
+        "text": "那我也不和你多废话。\n\n说回工作吧，你听说昨天的恐怖袭击了吗？",
+        "options": [
+          {
+            "option_id": "unaware",
+            "text": "完全没听说",
+            "next_node_id": "unaware"
+          },
+          {
+            "option_id": "aware",
+            "text": "基本知悉",
+            "next_node_id": "aware"
+          }
+        ]
+      },
+      "unaware": {
+        "node_id": "unaware",
+        "speaker": "boss",
+        "text": "那样更好，不要轻信那些媒体人的夸大其词。\n\n这伙黑客号称“光明社”，长期盗取宋王星集团的系统机密，一直以来我都怀疑内部员工里有人在协助他们，你的任务就是要找到这些反公司分子，然后狠狠把他们踢出去。\n\n今天从这个叫吕师的员工开始，具体档案你一会儿看邮箱。\n\n打起精神来，给我一个好球！",
+        "options": []
+      },
+      "aware": {
+        "node_id": "aware",
+        "speaker": "boss",
+        "text": "不管你以为你知道什么，我希望你从现在开始全部忘掉，一切以我说的为准。\n\n这伙黑客号称“光明社”，长期盗取宋王星集团的系统机密，一直以来我都怀疑内部员工里有人在协助他们，你的任务就是要找到这些反公司分子，然后狠狠把他们踢出去。\n\n今天从这个叫吕师的员工开始，具体档案你一会儿看邮箱。\n\n打起精神来，给我一个好球！",
+        "options": []
       }
     }
   }

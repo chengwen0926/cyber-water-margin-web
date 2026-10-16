@@ -19,6 +19,10 @@ const directions: Direction[] = ['n', 's', 'e', 'w', 'ne', 'nw', 'se', 'sw'];
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(value, max));
 
 export function Icon({ type }: { type: string }) {
+  const assets: Record<string, string> = { note: 'readme', email: 'email', archive: 'archives', medical: 'medical', chat: 'chat', trash: 'trash' };
+  if (assets[type]) {
+    return <span className="pixel-icon pixel-icon--asset" aria-hidden="true" style={{ backgroundImage: `url(/icons/${assets[type]}.svg)` }} />;
+  }
   return <span className={`pixel-icon pixel-icon--${type}`} aria-hidden="true"><span className="pixel-icon__detail" /></span>;
 }
 

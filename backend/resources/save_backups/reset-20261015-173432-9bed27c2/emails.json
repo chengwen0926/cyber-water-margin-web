@@ -1,0 +1,48 @@
+[
+  {
+    "email_id": "email_daily_1",
+    "day": 1,
+    "sender": "人事系统",
+    "subject": "第1天工作安排与候选人简历",
+    "body": "今日共有 3 位候选人前来面试，允许通过级别：intern、staff。\n\n今日审查规则：\n• 今日需核验所有候选人的健康状况是否如实填写\n• 今日需核验候选人是否隐瞒犯罪记录\n\n以下为今日待审查候选人的简历附件，请双击查看原件，或拖入档案系统建立档案。",
+    "attachments": [
+      {
+        "attachment_id": "attachment_case_1_0",
+        "case_id": "case_1_0",
+        "filename": "case_1_0_resume.pdf"
+      },
+      {
+        "attachment_id": "attachment_case_1_1",
+        "case_id": "case_1_1",
+        "filename": "case_1_1_resume.pdf"
+      },
+      {
+        "attachment_id": "attachment_case_1_2",
+        "case_id": "case_1_2",
+        "filename": "case_1_2_resume.pdf"
+      }
+    ]
+  },
+  {
+    "email_id": "story_offer_01",
+    "day": 1,
+    "sender": "宋王星集团人事自动化 <hr-bot@songwangxing.corp>",
+    "subject": "录用通知书｜调查专员（反公司活动调查部）",
+    "body": "收件人：调查部终端 · INV-0007\n入职日 07:50\n\n恭喜你通过调查专员岗位面试，欢迎加入宋王星集团。\n现邮件向你发出正式录用通知。你的岗位隶属「反公司活动调查部」。请严格遵守保密条例，不得向无关人员透露任何相关信息。\n今日请于终端登录后待命。部门主管将另行联络。\n——人力资源服务中心（自动发送）",
+    "attachments": []
+  },
+  {
+    "email_id": "story_gaoqiu_lvshi_01",
+    "day": 1,
+    "sender": "高俅 · 反公司活动调查部 部长",
+    "subject": "QH001-L｜代号：摩尼｜吕师调查档案",
+    "body": "对象：吕师（工号 NET-0311）。\n邮件编号：QH001-L    代号：摩尼\n\n这人跟昨夜袭击有牵连。好好地检查他的履历，从他嘴里问出点真东西。\n\n——高俅\n反公司活动调查部 部长",
+    "attachments": [
+      {
+        "attachment_id": "story_lvshi_resume",
+        "case_id": "case_1_0",
+        "filename": "吕师_基本档案.ssf"
+      }
+    ]
+  }
+]

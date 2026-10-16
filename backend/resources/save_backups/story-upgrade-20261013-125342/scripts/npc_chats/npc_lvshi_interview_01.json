@@ -1,0 +1,88 @@
+{
+  "script_id": "npc_lvshi_interview_01",
+  "participant": "npc",
+  "archetype_tags": [
+    "story:lvshi"
+  ],
+  "start_node_id": "start",
+  "nodes": {
+    "start": {
+      "node_id": "start",
+      "speaker": "npc",
+      "text": "调查部？真有意思。",
+      "options": [
+        {
+          "option_id": "reply_0",
+          "text": "按程序核对档案照片。请正面面对摄像头。",
+          "next_node_id": "photo"
+        }
+      ]
+    },
+    "photo": {
+      "node_id": "photo",
+      "speaker": "npc",
+      "text": "照片？一具皮囊罢了，对公司来说，我是一个工号、一封档案、一连串的通讯数据，我的人类外表真的重要吗？",
+      "options": [
+        {
+          "option_id": "reply_1",
+          "text": "投诉记录写：越权访问数据库，并转发反公司宣传。",
+          "next_node_id": "records"
+        }
+      ]
+    },
+    "records": {
+      "node_id": "records",
+      "speaker": "npc",
+      "text": "宣传？不，那叫告知。告知员工：你们的班次、账号、输入法、访问记录、甚至离开工程椅的时间间歇，都被记录进了你的档案……",
+      "options": [
+        {
+          "option_id": "reply_2",
+          "text": "系统显示，昨晚的黑客袭击时间与你的访问记录重合。",
+          "next_node_id": "friends"
+        }
+      ]
+    },
+    "friends": {
+      "node_id": "friends",
+      "speaker": "npc",
+      "text": "黑客？不，那只是一些朋友，我们对公司制度抱有同样的怀疑，如果有一天你也有怀疑，你也会成为我们的朋友。",
+      "options": [
+        {
+          "option_id": "reply_3",
+          "text": "你承认你协助了黑客袭击。",
+          "next_node_id": "messengers"
+        }
+      ]
+    },
+    "messengers": {
+      "node_id": "messengers",
+      "speaker": "npc",
+      "text": "我再次强调，那只是一次告知，让工具知道自己是工具，是一种出于理性的仁慈。他们也不是黑客，他们只是信使……",
+      "options": [
+        {
+          "option_id": "reply_4",
+          "text": "信使？他们还希望你传递什么？",
+          "next_node_id": "password"
+        }
+      ]
+    },
+    "password": {
+      "node_id": "password",
+      "speaker": "npc",
+      "text": "传递一句口令，公司主义终将灭亡，无论是宋王星集团、大契丹联合会还是白金重工都无法逃脱历史规律。",
+      "options": [
+        {
+          "option_id": "reply_5",
+          "text": "约谈结束。",
+          "next_node_id": "end"
+        }
+      ]
+    },
+    "end": {
+      "node_id": "end",
+      "speaker": "npc",
+      "text": "等等，你不是想要我的照片吗？那就让公司看看这张不肯低头的脸。",
+      "options": []
+    }
+  }
+}

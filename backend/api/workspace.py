@@ -81,7 +81,7 @@ def document(source: Source):
             raise HTTPException(400, '完成一次对话后才能归档聊天记录')
         body = '\n'.join(('我' if m.speaker == 'player' else profile.npc_name) + '：' + m.text for m in session.messages)
         title = f'{profile.npc_name} · 对话记录'
-    return {'source': source.model_dump(), 'title': title, 'case_id': case.case_id, 'fields': fields, 'body': body, 'contact': f'{case.npc_id}@localnet', 'name': profile.npc_name}
+    return {'source': source.model_dump(), 'title': title, 'case_id': case.case_id, 'fields': fields, 'body': body, 'contact': f'{profile.employee_id or case.npc_id}@localnet', 'name': profile.npc_name}
 
 
 @router.get('')
@@ -154,7 +154,7 @@ def items(body: ItemRequest):
 @router.post('/friends')
 def add_friend(body: FriendRequest):
     contact = body.contact.strip().lower()
-    match = next((c for c in case_loader.load_all() if f'{c.npc_id}@localnet'.lower() == contact), None)
+    match = next((c for c in case_loader.load_all() if contact in {f'{c.npc_id}@localnet'.lower(), f'{npc_loader.load(c.npc_id).employee_id or c.npc_id}@localnet'.lower()}), None)
     if match is None:
         raise HTTPException(404, '没有找到该联系方式，请核对简历')
     visible_case(match.case_id)

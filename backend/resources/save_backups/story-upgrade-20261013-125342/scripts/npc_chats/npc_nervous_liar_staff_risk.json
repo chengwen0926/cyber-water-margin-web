@@ -1,0 +1,50 @@
+{
+  "script_id": "npc_nervous_liar_staff_risk",
+  "participant": "npc",
+  "archetype_tags": ["staff", "nervous_liar", "risk_target"],
+  "start_node_id": "start",
+  "nodes": {
+    "start": {
+      "node_id": "start",
+      "speaker": "npc",
+      "text": "呃……你好，我、我是来面试正式员工岗位的。",
+      "options": [
+        { "option_id": "ask_health", "text": "问一下你的健康状况", "next_node_id": "health" },
+        { "option_id": "ask_criminal", "text": "问一下有没有犯罪记录", "next_node_id": "criminal" }
+      ]
+    },
+    "health": {
+      "node_id": "health",
+      "speaker": "npc",
+      "text": "我、我身体挺好的……没什么大问题。",
+      "options": [
+        { "option_id": "press", "text": "追问：体检报告能提供原件吗？", "next_node_id": "health_press" },
+        { "option_id": "continue", "text": "好的，先这样。", "next_node_id": "end" }
+      ]
+    },
+    "health_press": {
+      "node_id": "health_press",
+      "speaker": "npc",
+      "text": "这、这个……可能得过几天才能给你。",
+      "options": [
+        { "option_id": "continue", "text": "好的，我知道了。", "next_node_id": "end" }
+      ],
+      "reveals_clue": "clue_nervous_health_dodge"
+    },
+    "criminal": {
+      "node_id": "criminal",
+      "speaker": "npc",
+      "text": "没、没有！绝对没有犯罪记录！",
+      "options": [
+        { "option_id": "continue", "text": "好的，我知道了。", "next_node_id": "end" }
+      ],
+      "reveals_clue": "clue_nervous_criminal_overreact"
+    },
+    "end": {
+      "node_id": "end",
+      "speaker": "npc",
+      "text": "那、那我先挂了？",
+      "options": []
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "day": 4,
+  "npc_count": 3,
+  "allowed_npc_levels": ["staff", "senior"],
+  "review_rules": [
+    {
+      "rule_id": "rule_day4_criminal",
+      "field_key": "criminal_record",
+      "check_type": "must_match_medical",
+      "description": "今日需核验候选人是否隐瞒犯罪记录",
+      "severity": "reject_if_violated"
+    },
+    {
+      "rule_id": "rule_day4_gender",
+      "field_key": "gender",
+      "check_type": "must_match_medical",
+      "description": "今日需核验候选人性别信息是否属实（仅记录不强制拒绝）",
+      "severity": "flag_only"
+    }
+  ]
+}

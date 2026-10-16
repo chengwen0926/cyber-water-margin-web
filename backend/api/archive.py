@@ -12,6 +12,7 @@ router = APIRouter(prefix="/api/archive", tags=["archive"])
 class ArchiveSummary(BaseModel):
     case_id: str
     npc_id: str
+    employee_id: str | None = None
     npc_name: str
     npc_level: str
     avatar: str
@@ -38,6 +39,7 @@ def list_archive() -> list[ArchiveSummary]:
                 case_id=case.case_id,
                 npc_id=profile.npc_id,
                 npc_name=profile.npc_name,
+                employee_id=profile.employee_id,
                 npc_level=profile.npc_level,
                 avatar=profile.avatar,
                 verdict=save.case_verdicts.get(case.case_id),

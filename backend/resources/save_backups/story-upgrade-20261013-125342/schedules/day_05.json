@@ -1,0 +1,28 @@
+{
+  "day": 5,
+  "npc_count": 3,
+  "allowed_npc_levels": ["intern", "staff", "senior"],
+  "review_rules": [
+    {
+      "rule_id": "rule_day5_health",
+      "field_key": "health_status",
+      "check_type": "must_match_medical",
+      "description": "今日需核验所有候选人的健康状况是否如实填写",
+      "severity": "reject_if_violated"
+    },
+    {
+      "rule_id": "rule_day5_criminal",
+      "field_key": "criminal_record",
+      "check_type": "must_match_medical",
+      "description": "今日需核验候选人是否隐瞒犯罪记录",
+      "severity": "reject_if_violated"
+    },
+    {
+      "rule_id": "rule_day5_marital",
+      "field_key": "marital_status",
+      "check_type": "must_match_medical",
+      "description": "今日需核验婚姻状况字段（仅记录不强制拒绝）",
+      "severity": "flag_only"
+    }
+  ]
+}

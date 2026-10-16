@@ -157,9 +157,9 @@ export function ChatApp({ isActive, meetingContactId, onVideoCall, onHangUp }: {
   if (meetingContactId && onHangUp) return selected ? <MeetingView contact={selected} onHangUp={onHangUp} onChatVisibilityChange={setMeetingChatVisible}>{dialogue}</MeetingView> : <div className="meeting-loading">{dialogue}<button type="button" onClick={onHangUp}>取消通话</button></div>;
 
   return <div className={`messenger-app ${selected ? 'messenger-app--selected' : ''}`}>
-    <aside className="messenger-rail" aria-label="聊天导航"><span className="messenger-avatar messenger-avatar--self">我</span><span className="messenger-rail-active" title="聊天" aria-label="聊天">▤</span><span className="messenger-rail-bottom">LOCAL<br />NET</span></aside>
+
     <nav className="messenger-directory" aria-label="聊天联系人目录">
-      <div className="messenger-search"><button type="button" className="add-friend-button" onClick={() => setAddingFriend(!addingFriend)}>＋ 添加好友</button><input type="search" aria-label="搜索联系人" placeholder="搜索联系人" value={search} onChange={event => setSearch(event.target.value)} /></div>
+      <div className="messenger-search"><span className="messenger-profile" aria-label="当前用户：我">我</span><button type="button" className="add-friend-button" onClick={() => setAddingFriend(!addingFriend)}>＋ 添加好友</button><input type="search" aria-label="搜索联系人" placeholder="搜索联系人" value={search} onChange={event => setSearch(event.target.value)} /></div>
       {addingFriend && <form className="add-friend-form" onSubmit={async e => {e.preventDefault();const result = await files.run('正在查找联系人…', () => workspaceApi.friend(contactInput));if(result){refetchContacts();setAddingFriend(false);setSelectedContactId(result.case_id);}}}><label>简历上的联系方式<input value={contactInput} placeholder="候选人工号@localnet" onChange={e => setContactInput(e.target.value)} /></label><button disabled={!contactInput.trim() || !!files.busy}>添加</button></form>}
       <ReadFilterTabs value={readFilter} onChange={value => { setReadFilter(value); setSelectedContactId(null); setLoaded(null); setToast(null); }} />
       <div className="messenger-contacts">

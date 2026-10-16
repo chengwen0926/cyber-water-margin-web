@@ -14,7 +14,7 @@ def publish_call(script_id: str) -> None:
 
 def call_event(save):
     return {"event": "incoming_call", "script_id": save.latest_boss_script_id,
-            "revision": save.chat_call_revision, "contact_id": "boss", "caller_name": "领导"}
+            "revision": save.chat_call_revision, "contact_id": "boss", "caller_name": "高俅"}
 
 
 def pending_call():

@@ -183,6 +183,7 @@ export type DayResult = {
 };
 
 export type ArchiveSummary = {
+  employee_id?: string | null;
   case_id: string;
   npc_id: string;
   npc_name: string;

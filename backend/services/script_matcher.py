@@ -10,6 +10,7 @@ class ScriptMatcher:
     def pick(
         self, profile: NPCProfile, pool: list[ChatScript], rng: random.Random
     ) -> str:
+        pool = [s for s in pool if not any(t.startswith("story:") for t in s.archetype_tags)]
         tags = {
             profile.npc_level,
             profile.archetype,

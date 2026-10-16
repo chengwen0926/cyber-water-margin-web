@@ -31,6 +31,10 @@ class DailyQueueBuilder:
             case_id = f"case_{schedule.day}_{i}"
             resume = ResumeFactory().generate(profile, schedule, case_id, rng)
             script_id = ScriptMatcher().pick(profile, script_pool, rng)
+            if schedule.day == 1 and i == 0 and any(s.script_id == "npc_lvshi_interview_01" for s in script_pool):
+                profile.npc_name = "吕师"
+                profile.employee_id = "NET-0311"
+                script_id = "npc_lvshi_interview_01"
             case = Case(
                 case_id=case_id,
                 npc_id=profile.npc_id,

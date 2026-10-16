@@ -1,0 +1,61 @@
+{
+  "case_id": "case_1_1",
+  "npc_id": "npc_1_1",
+  "resume": {
+    "case_id": "case_1_1",
+    "fields": [
+      {
+        "key": "gender",
+        "label": "性别",
+        "value": "女",
+        "is_falsified": true,
+        "conflict_source": "npc_profile.medical_fields.gender"
+      },
+      {
+        "key": "health_status",
+        "label": "健康状况",
+        "value": "轻度贫血",
+        "is_falsified": false,
+        "conflict_source": null
+      },
+      {
+        "key": "marital_status",
+        "label": "婚姻状况",
+        "value": "未婚",
+        "is_falsified": false,
+        "conflict_source": null
+      },
+      {
+        "key": "graduation_year",
+        "label": "毕业年份",
+        "value": "2019",
+        "is_falsified": false,
+        "conflict_source": null
+      },
+      {
+        "key": "criminal_record",
+        "label": "犯罪记录",
+        "value": "无犯罪记录",
+        "is_falsified": false,
+        "conflict_source": null
+      },
+      {
+        "key": "prior_employment",
+        "label": "过往履历",
+        "value": "曾被辞退",
+        "is_falsified": false,
+        "conflict_source": null
+      }
+    ],
+    "photo": {
+      "photo_url": "/resume_photos/case_1_1.png",
+      "is_anomalous": false,
+      "anomaly_note": null
+    },
+    "attachments": [
+      "case_1_1_resume.pdf"
+    ],
+    "downloaded": false
+  },
+  "chat_script_id": "npc_confident_liar_intern_normal"
+}

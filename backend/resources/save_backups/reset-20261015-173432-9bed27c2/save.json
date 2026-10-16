@@ -1,0 +1,33 @@
+{
+  "desktop_items": [],
+  "desktop_settings": {
+    "brightness": 100,
+    "icon_size": 64,
+    "motion": true
+  },
+  "archive_case_ids": [],
+  "friend_case_ids": [],
+  "archive_evidence": {},
+  "read_receipts": {
+    "chat": {
+      "boss": "1:boss_gaoqiu_onboarding_01:start:3"
+    }
+  },
+  "handled_call_revision": 3,
+  "chat_call_revision": 3,
+  "latest_boss_script_id": "boss_gaoqiu_onboarding_01",
+  "current_day": 1,
+  "unlocked_emails": [],
+  "downloaded_attachments": [],
+  "resume_field_flags": {},
+  "discovered_clues": [],
+  "chat_progress": {},
+  "conversation_progress": {},
+  "chat_transcripts": {},
+  "case_verdicts": {},
+  "active_directives": [],
+  "completed_directive_actions": {},
+  "day_results": {},
+  "penalty_records": [],
+  "strikes": 0
+}

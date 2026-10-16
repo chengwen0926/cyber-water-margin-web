@@ -2,11 +2,12 @@
 
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import type { ChatContact, ChatSession } from '@/lib/api';
+import { BossPortrait } from './BossPortrait';
 
 export function ChatAvatar({ contact }: { contact: ChatContact }) {
   const [failed, setFailed] = useState(false);
   return <span className={`messenger-avatar ${contact.kind === 'boss' ? 'messenger-avatar--boss' : ''}`}>
-    {contact.avatar && !failed ? <img src={contact.avatar} alt="" onError={() => setFailed(true)} /> : contact.name.slice(0, 1)}
+    {contact.kind === 'boss' ? <><span className="messenger-avatar-initial">领</span><BossPortrait /></> : contact.avatar && !failed ? <img src={contact.avatar} alt="" onError={() => setFailed(true)} /> : contact.name.slice(0, 1)}
   </span>;
 }
 

@@ -1,0 +1,684 @@
+{
+  "desktop_items": [
+    {
+      "id": "939babb8-4427-4cfc-af94-0ada6cf9ab20",
+      "kind": "file",
+      "name": "花荣0 · 个人简历",
+      "parent_id": null,
+      "deleted": false,
+      "source": {
+        "kind": "resume",
+        "id": "case_1_0"
+      }
+    },
+    {
+      "id": "a8e40f0e-e0ff-4678-ab76-ebc27d8f3770",
+      "kind": "file",
+      "name": "柴进1 · 个人简历",
+      "parent_id": null,
+      "deleted": false,
+      "source": {
+        "kind": "resume",
+        "id": "case_1_1"
+      }
+    },
+    {
+      "id": "ec4e22b4-277f-4404-baac-76b18f720179",
+      "kind": "file",
+      "name": "吴用2 · 个人简历",
+      "parent_id": null,
+      "deleted": false,
+      "source": {
+        "kind": "resume",
+        "id": "case_1_2"
+      }
+    },
+    {
+      "id": "e5d381c2-1972-4fd4-93a4-81cd93682866",
+      "kind": "file",
+      "name": "阮小七0 · 个人简历",
+      "parent_id": null,
+      "deleted": false,
+      "source": {
+        "kind": "resume",
+        "id": "case_2_0"
+      }
+    },
+    {
+      "id": "4f81dfd8-5c00-4bd3-b73a-c81c9e08a76d",
+      "kind": "file",
+      "name": "吴用1 · 个人简历",
+      "parent_id": null,
+      "deleted": false,
+      "source": {
+        "kind": "resume",
+        "id": "case_2_1"
+      }
+    },
+    {
+      "id": "a9584a94-579b-4b84-b47b-b79543dea42c",
+      "kind": "file",
+      "name": "花荣2 · 个人简历",
+      "parent_id": null,
+      "deleted": false,
+      "source": {
+        "kind": "resume",
+        "id": "case_2_2"
+      }
+    }
+  ],
+  "desktop_settings": {
+    "brightness": 100,
+    "icon_size": 64,
+    "motion": true
+  },
+  "archive_case_ids": [
+    "case_1_0",
+    "case_1_1",
+    "case_1_2",
+    "case_2_2",
+    "case_2_1"
+  ],
+  "friend_case_ids": [],
+  "archive_evidence": {
+    "case_1_0": [
+      {
+        "source": {
+          "kind": "resume",
+          "id": "case_1_0"
+        },
+        "title": "花荣0 · 个人简历",
+        "case_id": "case_1_0",
+        "fields": [
+          {
+            "key": "gender",
+            "label": "性别",
+            "value": "女"
+          },
+          {
+            "key": "health_status",
+            "label": "健康状况",
+            "value": "体检合格"
+          },
+          {
+            "key": "marital_status",
+            "label": "婚姻状况",
+            "value": "已婚"
+          },
+          {
+            "key": "graduation_year",
+            "label": "毕业年份",
+            "value": "2022"
+          },
+          {
+            "key": "criminal_record",
+            "label": "犯罪记录",
+            "value": "无犯罪记录"
+          },
+          {
+            "key": "prior_employment",
+            "label": "过往履历",
+            "value": "首次求职"
+          }
+        ],
+        "body": "候选人自述材料，信息有待独立核实。",
+        "contact": "npc_1_0@localnet",
+        "name": "花荣0"
+      },
+      {
+        "source": {
+          "kind": "medical",
+          "id": "case_1_0"
+        },
+        "title": "花荣0 · 核验原件",
+        "case_id": "case_1_0",
+        "fields": [
+          {
+            "key": "gender",
+            "label": "性别",
+            "value": "男"
+          },
+          {
+            "key": "health_status",
+            "label": "健康状况",
+            "value": "隐瞒病史"
+          },
+          {
+            "key": "marital_status",
+            "label": "婚姻状况",
+            "value": "已婚"
+          },
+          {
+            "key": "graduation_year",
+            "label": "毕业年份",
+            "value": "2022"
+          },
+          {
+            "key": "criminal_record",
+            "label": "犯罪记录",
+            "value": "有犯罪记录"
+          },
+          {
+            "key": "prior_employment",
+            "label": "过往履历",
+            "value": "首次求职"
+          }
+        ],
+        "body": "医疗库提供的原始登记资料。请结合各项资料与当天审查规则判断。",
+        "contact": "npc_1_0@localnet",
+        "name": "花荣0"
+      }
+    ],
+    "case_1_1": [
+      {
+        "source": {
+          "kind": "resume",
+          "id": "case_1_1"
+        },
+        "title": "柴进1 · 个人简历",
+        "case_id": "case_1_1",
+        "fields": [
+          {
+            "key": "gender",
+            "label": "性别",
+            "value": "女"
+          },
+          {
+            "key": "health_status",
+            "label": "健康状况",
+            "value": "轻度贫血"
+          },
+          {
+            "key": "marital_status",
+            "label": "婚姻状况",
+            "value": "未婚"
+          },
+          {
+            "key": "graduation_year",
+            "label": "毕业年份",
+            "value": "2019"
+          },
+          {
+            "key": "criminal_record",
+            "label": "犯罪记录",
+            "value": "无犯罪记录"
+          },
+          {
+            "key": "prior_employment",
+            "label": "过往履历",
+            "value": "曾被辞退"
+          }
+        ],
+        "body": "候选人自述材料，信息有待独立核实。",
+        "contact": "npc_1_1@localnet",
+        "name": "柴进1"
+      },
+      {
+        "source": {
+          "kind": "medical",
+          "id": "case_1_1"
+        },
+        "title": "柴进1 · 核验原件",
+        "case_id": "case_1_1",
+        "fields": [
+          {
+            "key": "gender",
+            "label": "性别",
+            "value": "男"
+          },
+          {
+            "key": "health_status",
+            "label": "健康状况",
+            "value": "轻度贫血"
+          },
+          {
+            "key": "marital_status",
+            "label": "婚姻状况",
+            "value": "未婚"
+          },
+          {
+            "key": "graduation_year",
+            "label": "毕业年份",
+            "value": "2019"
+          },
+          {
+            "key": "criminal_record",
+            "label": "犯罪记录",
+            "value": "无犯罪记录"
+          },
+          {
+            "key": "prior_employment",
+            "label": "过往履历",
+            "value": "曾被辞退"
+          }
+        ],
+        "body": "医疗库提供的原始登记资料。请结合各项资料与当天审查规则判断。",
+        "contact": "npc_1_1@localnet",
+        "name": "柴进1"
+      }
+    ],
+    "case_1_2": [
+      {
+        "source": {
+          "kind": "resume",
+          "id": "case_1_2"
+        },
+        "title": "吴用2 · 个人简历",
+        "case_id": "case_1_2",
+        "fields": [
+          {
+            "key": "gender",
+            "label": "性别",
+            "value": "男"
+          },
+          {
+            "key": "health_status",
+            "label": "健康状况",
+            "value": "隐瞒病史"
+          },
+          {
+            "key": "marital_status",
+            "label": "婚姻状况",
+            "value": "未婚"
+          },
+          {
+            "key": "graduation_year",
+            "label": "毕业年份",
+            "value": "2022"
+          },
+          {
+            "key": "criminal_record",
+            "label": "犯罪记录",
+            "value": "有犯罪记录"
+          },
+          {
+            "key": "prior_employment",
+            "label": "过往履历",
+            "value": "首次求职"
+          }
+        ],
+        "body": "候选人自述材料，信息有待独立核实。",
+        "contact": "npc_1_2@localnet",
+        "name": "吴用2"
+      },
+      {
+        "source": {
+          "kind": "medical",
+          "id": "case_1_2"
+        },
+        "title": "吴用2 · 核验原件",
+        "case_id": "case_1_2",
+        "fields": [
+          {
+            "key": "gender",
+            "label": "性别",
+            "value": "男"
+          },
+          {
+            "key": "health_status",
+            "label": "健康状况",
+            "value": "隐瞒病史"
+          },
+          {
+            "key": "marital_status",
+            "label": "婚姻状况",
+            "value": "未婚"
+          },
+          {
+            "key": "graduation_year",
+            "label": "毕业年份",
+            "value": "2022"
+          },
+          {
+            "key": "criminal_record",
+            "label": "犯罪记录",
+            "value": "有犯罪记录"
+          },
+          {
+            "key": "prior_employment",
+            "label": "过往履历",
+            "value": "首次求职"
+          }
+        ],
+        "body": "医疗库提供的原始登记资料。请结合各项资料与当天审查规则判断。",
+        "contact": "npc_1_2@localnet",
+        "name": "吴用2"
+      }
+    ],
+    "case_2_2": [
+      {
+        "source": {
+          "kind": "resume",
+          "id": "case_2_2"
+        },
+        "title": "花荣2 · 个人简历",
+        "case_id": "case_2_2",
+        "fields": [
+          {
+            "key": "gender",
+            "label": "性别",
+            "value": "男"
+          },
+          {
+            "key": "health_status",
+            "label": "健康状况",
+            "value": "轻度贫血"
+          },
+          {
+            "key": "marital_status",
+            "label": "婚姻状况",
+            "value": "已婚"
+          },
+          {
+            "key": "graduation_year",
+            "label": "毕业年份",
+            "value": "2021"
+          },
+          {
+            "key": "criminal_record",
+            "label": "犯罪记录",
+            "value": "有犯罪记录"
+          },
+          {
+            "key": "prior_employment",
+            "label": "过往履历",
+            "value": "有过跳槽记录"
+          }
+        ],
+        "body": "候选人自述材料，信息有待独立核实。",
+        "contact": "npc_2_2@localnet",
+        "name": "花荣2"
+      },
+      {
+        "source": {
+          "kind": "medical",
+          "id": "case_2_2"
+        },
+        "title": "花荣2 · 核验原件",
+        "case_id": "case_2_2",
+        "fields": [
+          {
+            "key": "gender",
+            "label": "性别",
+            "value": "男"
+          },
+          {
+            "key": "health_status",
+            "label": "健康状况",
+            "value": "轻度贫血"
+          },
+          {
+            "key": "marital_status",
+            "label": "婚姻状况",
+            "value": "已婚"
+          },
+          {
+            "key": "graduation_year",
+            "label": "毕业年份",
+            "value": "2021"
+          },
+          {
+            "key": "criminal_record",
+            "label": "犯罪记录",
+            "value": "有犯罪记录"
+          },
+          {
+            "key": "prior_employment",
+            "label": "过往履历",
+            "value": "有过跳槽记录"
+          }
+        ],
+        "body": "医疗库提供的原始登记资料。请结合各项资料与当天审查规则判断。",
+        "contact": "npc_2_2@localnet",
+        "name": "花荣2"
+      }
+    ],
+    "case_2_1": [
+      {
+        "source": {
+          "kind": "resume",
+          "id": "case_2_1"
+        },
+        "title": "吴用1 · 个人简历",
+        "case_id": "case_2_1",
+        "fields": [
+          {
+            "key": "gender",
+            "label": "性别",
+            "value": "女"
+          },
+          {
+            "key": "health_status",
+            "label": "健康状况",
+            "value": "体检合格"
+          },
+          {
+            "key": "marital_status",
+            "label": "婚姻状况",
+            "value": "未婚（存疑）"
+          },
+          {
+            "key": "graduation_year",
+            "label": "毕业年份",
+            "value": "2021"
+          },
+          {
+            "key": "criminal_record",
+            "label": "犯罪记录",
+            "value": "有犯罪记录"
+          },
+          {
+            "key": "prior_employment",
+            "label": "过往履历",
+            "value": "首次求职"
+          }
+        ],
+        "body": "候选人自述材料，信息有待独立核实。",
+        "contact": "npc_2_1@localnet",
+        "name": "吴用1"
+      },
+      {
+        "source": {
+          "kind": "medical",
+          "id": "case_2_1"
+        },
+        "title": "吴用1 · 核验原件",
+        "case_id": "case_2_1",
+        "fields": [
+          {
+            "key": "gender",
+            "label": "性别",
+            "value": "女"
+          },
+          {
+            "key": "health_status",
+            "label": "健康状况",
+            "value": "体检合格"
+          },
+          {
+            "key": "marital_status",
+            "label": "婚姻状况",
+            "value": "未婚"
+          },
+          {
+            "key": "graduation_year",
+            "label": "毕业年份",
+            "value": "2021"
+          },
+          {
+            "key": "criminal_record",
+            "label": "犯罪记录",
+            "value": "有犯罪记录"
+          },
+          {
+            "key": "prior_employment",
+            "label": "过往履历",
+            "value": "有过跳槽记录"
+          }
+        ],
+        "body": "医疗库提供的原始登记资料。请结合各项资料与当天审查规则判断。",
+        "contact": "npc_2_1@localnet",
+        "name": "吴用1"
+      }
+    ]
+  },
+  "read_receipts": {
+    "chat": {
+      "boss": "2:boss_call_checkin_01:end:2:messages=8"
+    },
+    "email": {
+      "email_daily_1": "1",
+      "email_daily_2": "1"
+    },
+    "archive": {
+      "case_1_0": "3",
+      "case_1_1": "3",
+      "case_1_2": "3",
+      "case_2_2": "3",
+      "case_2_1": "3"
+    },
+    "medical": {
+      "npc_1_0": "1",
+      "npc_1_1": "1",
+      "npc_1_2": "1",
+      "npc_2_1": "1",
+      "npc_2_2": "1"
+    }
+  },
+  "handled_call_revision": 2,
+  "chat_call_revision": 2,
+  "latest_boss_script_id": "boss_call_checkin_01",
+  "current_day": 2,
+  "unlocked_emails": [],
+  "downloaded_attachments": [],
+  "resume_field_flags": {},
+  "discovered_clues": [
+    "clue_case_1_0_gender",
+    "clue_case_1_0_health_status",
+    "clue_case_1_0_criminal_record",
+    "clue_case_1_1_gender",
+    "clue_case_2_1_marital_status",
+    "clue_case_2_1_prior_employment"
+  ],
+  "chat_progress": {},
+  "conversation_progress": {
+    "[\"boss\",\"boss_call_checkin_01\",1]": "end",
+    "[\"boss\",\"boss_call_checkin_01\",2]": "end"
+  },
+  "chat_transcripts": {
+    "[\"boss\",\"boss_call_checkin_01\",1]": [
+      {
+        "speaker": "boss",
+        "text": "今天辛苦了，把该来的都查一遍，别放过任何一个隐瞒病史的。"
+      },
+      {
+        "speaker": "player",
+        "text": "明白，领导。"
+      },
+      {
+        "speaker": "boss",
+        "text": "嗯，去忙吧。"
+      },
+      {
+        "speaker": "player",
+        "text": "你好"
+      },
+      {
+        "speaker": "boss",
+        "text": "你好，我在。刚才的交流已记录，你可以继续留言。"
+      }
+    ],
+    "[\"boss\",\"boss_call_checkin_01\",2]": [
+      {
+        "speaker": "boss",
+        "text": "今天辛苦了，把该来的都查一遍，别放过任何一个隐瞒病史的。"
+      },
+      {
+        "speaker": "player",
+        "text": "明白，领导。"
+      },
+      {
+        "speaker": "boss",
+        "text": "嗯，去忙吧。"
+      },
+      {
+        "speaker": "player",
+        "text": "你好"
+      },
+      {
+        "speaker": "boss",
+        "text": "你好，我在。刚才的交流已记录，你可以继续留言。"
+      },
+      {
+        "speaker": "boss",
+        "text": "今天辛苦了，把该来的都查一遍，别放过任何一个隐瞒病史的。"
+      },
+      {
+        "speaker": "player",
+        "text": "明白，领导。"
+      },
+      {
+        "speaker": "boss",
+        "text": "嗯，去忙吧。"
+      }
+    ]
+  },
+  "case_verdicts": {
+    "case_1_1": "approved",
+    "case_1_2": "approved",
+    "case_1_0": "approved"
+  },
+  "active_directives": [],
+  "completed_directive_actions": {},
+  "day_results": {
+    "1": {
+      "day": 1,
+      "judgements": [
+        {
+          "case_id": "case_1_0",
+          "player_verdict": "approved",
+          "correct_verdict": "rejected",
+          "is_correct": false
+        },
+        {
+          "case_id": "case_1_1",
+          "player_verdict": "approved",
+          "correct_verdict": "approved",
+          "is_correct": true
+        },
+        {
+          "case_id": "case_1_2",
+          "player_verdict": "approved",
+          "correct_verdict": "approved",
+          "is_correct": true
+        }
+      ],
+      "total_count": 3,
+      "error_count": 1,
+      "error_rate": 0.3333333333333333,
+      "directive_results": {},
+      "penalty_triggered": {
+        "day_triggered": 1,
+        "rule_id": "penalty_single_day",
+        "action": {
+          "action_type": "warning",
+          "action_payload": null,
+          "severity": 1
+        }
+      },
+      "is_final_day": false
+    }
+  },
+  "penalty_records": [
+    {
+      "day_triggered": 1,
+      "rule_id": "penalty_single_day",
+      "action": {
+        "action_type": "warning",
+        "action_payload": null,
+        "severity": 1
+      }
+    }
+  ],
+  "strikes": 1
+}

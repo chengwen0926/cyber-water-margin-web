@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import type { IncomingCallEvent } from '@/lib/api';
+import { BossPortrait } from './BossPortrait';
 
 type Props = {
   call: IncomingCallEvent;
@@ -28,7 +29,7 @@ export function IncomingCallModal({ call, onAnswer, onDecline }: Props) {
       }} className="incoming-call-modal" role="dialog" aria-modal="true" aria-labelledby="incoming-call-title">
         <div className="incoming-call-titlebar"><span>视频来电</span><span className="incoming-call-signal">LOCALNET</span></div>
         <div className="incoming-call-body">
-          <div className="incoming-call-avatar" aria-hidden="true">{name.slice(0, 1)}</div>
+          <div className="incoming-call-avatar" aria-hidden="true">{(call.contact_id ?? 'boss') === 'boss' ? <BossPortrait /> : name.slice(0, 1)}</div>
           <div className="incoming-call-copy">
             <span className="incoming-call-label">视频来电</span>
             <h2 id="incoming-call-title">{name}</h2>

@@ -64,10 +64,14 @@ def advance_day() -> DailyGenerationResult:
     email_loader.append(_daily_email(next_day, schedule, result.cases))
 
     save_manager.update(lambda s: _set_current_day(s, next_day))
+    if next_day == 1 and any(s.script_id == "npc_lvshi_interview_01" for s in script_pool):
+        from services.onboarding_story import ensure_story
+        ensure_story(replay_opening=False)
 
     boss_scripts = script_loader.load_all_boss_scripts()
     if boss_scripts:
-        publish_call(boss_scripts[0].script_id)
+        opening = next((s for s in boss_scripts if next_day == 1 and s.script_id == "boss_gaoqiu_onboarding_01"), boss_scripts[0])
+        publish_call(opening.script_id)
 
     return result
 

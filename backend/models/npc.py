@@ -7,6 +7,7 @@ from models.resume import ResumeField
 
 class NPCProfile(BaseModel):
     npc_id: str
+    employee_id: str | None = None
     npc_name: str
     npc_level: str
     archetype: str

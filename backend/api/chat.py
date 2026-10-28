@@ -174,7 +174,7 @@ def advance_session(contact_id: str, body: SessionAdvanceRequest) -> ChatSession
         key = chat_sessions.session_key(contact_id, script.script_id, save.chat_call_revision if contact_id == "boss" else 0)
         save.chat_transcripts[key] = [*session.messages,
             ChatMessage(speaker="player", text=option.text),
-            ChatMessage(speaker=next_node.speaker, text=next_node.text)]
+            ChatMessage(speaker=next_node.speaker, text=next_node.text, beats=next_node.beats)]
         save.conversation_progress[key] = next_node.node_id
         if next_node.reveals_clue and next_node.reveals_clue not in save.discovered_clues:
             save.discovered_clues.append(next_node.reveals_clue)
@@ -223,7 +223,8 @@ def send_message(contact_id: str, body: SessionMessageRequest) -> ChatSession:
             reply = "收到你的补充留言。本次面谈的事项已记录。"
         key = chat_sessions.session_key(contact_id, script.script_id, save.chat_call_revision if contact_id == "boss" else 0)
         save.chat_transcripts[key] = [*session.messages, ChatMessage(speaker="player", text=text),
-            ChatMessage(speaker="boss" if contact_id == "boss" else "npc", text=reply)]
+            ChatMessage(speaker="boss" if contact_id == "boss" else "npc", text=reply,
+                        beats=next_node.beats if option else [])]
         if option:
             save.conversation_progress[key] = next_node.node_id
             if next_node.reveals_clue and next_node.reveals_clue not in save.discovered_clues:

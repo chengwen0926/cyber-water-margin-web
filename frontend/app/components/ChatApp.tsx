@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import { archiveApi, chatApi, directivesApi } from '@/lib/api';
 import type { ArchiveSummary, ChatContact, ChatSession, SpecialDirective } from '@/lib/api';
 import { useApi } from '@/lib/useApi';
+import { useDialoguePlayback } from '@/lib/useDialoguePlayback';
 import { MeetingView } from './MeetingView';
 import { ChatAvatar, DialogueTreeView } from './DialogueTreeView';
 import { ReadFilterTabs, type ReadFilter, ReadStatus, useReadReceipt, useReading } from './ReadingProvider';
@@ -50,6 +51,7 @@ export function ChatApp({ isActive, meetingContactId, onVideoCall, onHangUp }: {
   const version = receipt?.version;
   const session = loaded?.session.contact_id === selectedId && loaded?.session.script_id === scriptId ? loaded.session : null;
   const currentNode = session?.current_node;
+  const playback = useDialoguePlayback(session);
   const pendingText = pending?.contactId === selectedId && pending?.scriptId === scriptId ? pending.text : null;
   const selectionRef = useRef(selectedId);
   selectionRef.current = selectedId;
@@ -145,7 +147,7 @@ export function ChatApp({ isActive, meetingContactId, onVideoCall, onHangUp }: {
   };
 
   const dialogue = session && selected ? (
-    <DialogueTreeView key={`${session.contact_id}:${session.script_id}`} onSendText={meetingContactId ? handleSendText : undefined} session={session} contact={selected} pendingText={pendingText} busy={pending !== null} onAdvance={handleAdvance}>
+    <DialogueTreeView key={`${session.contact_id}:${session.script_id}`} playback={playback} onSendText={meetingContactId ? handleSendText : undefined} session={session} contact={selected} pendingText={pendingText} busy={pending !== null} onAdvance={handleAdvance}>
       {selected.kind === 'npc' && session.messages.some(m => m.speaker === 'player') && <div className="chat-evidence-file"><FileTile name="对话记录 · 拖入档案" source={{kind:'chat',id:selected.id}} /></div>}
       {toast && <div className="messenger-notice" role="status">{toast}</div>}
       {selected.kind === 'npc' && activeDirectives && activeDirectives.length > 0 && <div className="messenger-notice">可执行密令：{activeDirectives.map(directive => <button type="button" key={directive.directive_id} onClick={() => handleExecuteDirective(directive.directive_id)}>{directive.action.action_type}</button>)}</div>}
@@ -154,7 +156,7 @@ export function ChatApp({ isActive, meetingContactId, onVideoCall, onHangUp }: {
     {(selected || !!contactsError) && <button type="button" onClick={() => { refetchContacts(); refreshReading(); setReload(value => value + 1); }}>重新加载</button>}
   </div>;
 
-  if (meetingContactId && onHangUp) return selected ? <MeetingView contact={selected} onHangUp={onHangUp} onChatVisibilityChange={setMeetingChatVisible}>{dialogue}</MeetingView> : <div className="meeting-loading">{dialogue}<button type="button" onClick={onHangUp}>取消通话</button></div>;
+  if (meetingContactId && onHangUp) return selected ? <MeetingView contact={selected} expression={session?.script_id === 'boss_gaoqiu_onboarding_01' ? playback.expression : undefined} onHangUp={onHangUp} onChatVisibilityChange={setMeetingChatVisible}>{dialogue}</MeetingView> : <div className="meeting-loading">{dialogue}<button type="button" onClick={onHangUp}>取消通话</button></div>;
 
   return <div className={`messenger-app ${selected ? 'messenger-app--selected' : ''}`}>
 

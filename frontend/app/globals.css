@@ -1017,3 +1017,14 @@ button { color: inherit; }
   .meeting-terminal .messenger-composer-label > span { display: none; }
   .meeting-scene-portrait { inset-inline: 4%; }
 }
+
+/* Authored opening performance, synchronized with the terminal data stream. */
+.meeting-boss-performance { position: absolute; inset: 0; width: 100%; height: 100%; }
+.dialogue-byte { animation: dialogue-byte-arrive .16s ease-out both; }
+.dialogue-cursor { color: #d8ffb6; text-shadow: 0 0 7px #9cf47e; animation: dialogue-cursor-blink .7s steps(2, end) infinite; }
+.dialogue-reveal { align-self: flex-start; margin: 0 0 6px; padding: 3px 10px; border: 1px solid #76946a; background: #132c1b; color: #d5e5b7; font: inherit; font-size: 14px; cursor: pointer; }
+.meeting-terminal .messenger-message strong { font-weight: 900; color: #e2efbd; text-shadow: 0 0 4px #c4e99e50; }
+.meeting-terminal .messenger-options button:disabled { opacity: .45; cursor: default; }
+@keyframes dialogue-byte-arrive { from { color: #efffe2; text-shadow: 0 0 9px #bdff8f; } to { text-shadow: none; } }
+@keyframes dialogue-cursor-blink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .dialogue-byte, .dialogue-cursor { animation: none; } }

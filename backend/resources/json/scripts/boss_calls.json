@@ -80,6 +80,22 @@
             "text": "就是我！（充满干劲的语气）",
             "next_node_id": "eager"
           }
+        ],
+        "beats": [
+          {
+            "text": "你，",
+            "expression": "smile",
+            "char_ms": 45,
+            "pause_after_ms": 650,
+            "emphasis": []
+          },
+          {
+            "text": "就是新来的员工吗？",
+            "expression": "smile",
+            "char_ms": 45,
+            "pause_after_ms": 0,
+            "emphasis": []
+          }
         ]
       },
       "cold": {
@@ -96,6 +112,29 @@
             "option_id": "skip",
             "text": "我对体育不太了解",
             "next_node_id": "skip_sports"
+          }
+        ],
+        "beats": [
+          {
+            "text": "真是一张毫无朝气的面孔，不禁让我想起2104年的冬天，",
+            "expression": "recollect",
+            "char_ms": 45,
+            "pause_after_ms": 250,
+            "emphasis": []
+          },
+          {
+            "text": "我带领新东京队客场迎战大名队，比分落后整整50分，",
+            "expression": "animated",
+            "char_ms": 45,
+            "pause_after_ms": 250,
+            "emphasis": []
+          },
+          {
+            "text": "当时我的队友也是你这个表情。",
+            "expression": "gaze",
+            "char_ms": 45,
+            "pause_after_ms": 0,
+            "emphasis": []
           }
         ]
       },
@@ -114,6 +153,29 @@
             "text": "我对体育不太了解",
             "next_node_id": "skip_sports"
           }
+        ],
+        "beats": [
+          {
+            "text": "真是一张朝气蓬勃的面孔，不禁让我想起2100年的夏天，",
+            "expression": "recollect",
+            "char_ms": 45,
+            "pause_after_ms": 250,
+            "emphasis": []
+          },
+          {
+            "text": "我第一次踏上新东京体育馆的球场，",
+            "expression": "animated",
+            "char_ms": 45,
+            "pause_after_ms": 250,
+            "emphasis": []
+          },
+          {
+            "text": "当时我也是你这个表情。",
+            "expression": "gaze",
+            "char_ms": 45,
+            "pause_after_ms": 0,
+            "emphasis": []
+          }
         ]
       },
       "lesson": {
@@ -130,6 +192,45 @@
             "option_id": "aware",
             "text": "基本知悉",
             "next_node_id": "aware"
+          }
+        ],
+        "beats": [
+          {
+            "text": "……我从球场上学会的最重要的一件事，",
+            "expression": "recollect",
+            "char_ms": 30,
+            "pause_after_ms": 650,
+            "emphasis": []
+          },
+          {
+            "text": "你在人生只有两种选择，要么当猎手，要么当猎物。",
+            "expression": "recollect",
+            "char_ms": 30,
+            "pause_after_ms": 240,
+            "emphasis": []
+          },
+          {
+            "text": "我们打职业蹴鞠，重要的不是抓住那个球，而是找到人群中的软蛋，",
+            "expression": "grasp",
+            "char_ms": 30,
+            "pause_after_ms": 240,
+            "emphasis": []
+          },
+          {
+            "text": "不管他们的面孔看起来有多神气，相信我，只要你死死盯住他们，一定会发现他们眼神里的恐惧，等他们躲闪的一刹那，那就是你赢得比赛的机会……",
+            "expression": "gaze",
+            "char_ms": 30,
+            "pause_after_ms": 450,
+            "emphasis": []
+          },
+          {
+            "text": "\n\n说回工作吧，你听说昨天的恐怖袭击了吗？",
+            "expression": "smile",
+            "char_ms": 45,
+            "pause_after_ms": 0,
+            "emphasis": [
+              "恐怖袭击"
+            ]
           }
         ]
       },
@@ -148,19 +249,153 @@
             "text": "基本知悉",
             "next_node_id": "aware"
           }
+        ],
+        "beats": [
+          {
+            "text": "那我也不和你多废话。",
+            "expression": "gaze",
+            "char_ms": 45,
+            "pause_after_ms": 400,
+            "emphasis": []
+          },
+          {
+            "text": "\n\n说回工作吧，你听说昨天的恐怖袭击了吗？",
+            "expression": "smile",
+            "char_ms": 45,
+            "pause_after_ms": 0,
+            "emphasis": [
+              "恐怖袭击"
+            ]
+          }
         ]
       },
       "unaware": {
         "node_id": "unaware",
         "speaker": "boss",
         "text": "那样更好，不要轻信那些媒体人的夸大其词。\n\n这伙黑客号称“光明社”，长期盗取宋王星集团的系统机密，一直以来我都怀疑内部员工里有人在协助他们，你的任务就是要找到这些反公司分子，然后狠狠把他们踢出去。\n\n今天从这个叫吕师的员工开始，具体档案你一会儿看邮箱。\n\n打起精神来，给我一个好球！",
-        "options": []
+        "options": [],
+        "beats": [
+          {
+            "text": "那样更好，不要轻信那些媒体人的夸大其词。",
+            "expression": "gaze",
+            "char_ms": 45,
+            "pause_after_ms": 450,
+            "emphasis": []
+          },
+          {
+            "text": "\n\n这伙黑客号称“光明社”，长期盗取宋王星集团的系统机密，一直以来我都怀疑内部员工里有人在协助他们，",
+            "expression": "gaze",
+            "char_ms": 45,
+            "pause_after_ms": 0,
+            "emphasis": [
+              "光明社",
+              "宋王星集团"
+            ]
+          },
+          {
+            "text": "你的任务就是要找到这些反公司分子，然后狠狠把他们踢出去。",
+            "expression": "grasp",
+            "char_ms": 45,
+            "pause_after_ms": 450,
+            "emphasis": []
+          },
+          {
+            "text": "\n\n今天从这个叫吕师的员工开始，具体档案你一会儿看邮箱。",
+            "expression": "gaze",
+            "char_ms": 45,
+            "pause_after_ms": 450,
+            "emphasis": [
+              "吕师",
+              "邮箱"
+            ]
+          },
+          {
+            "text": "\n\n打起精神来，",
+            "expression": "grasp",
+            "char_ms": 45,
+            "pause_after_ms": 650,
+            "emphasis": []
+          },
+          {
+            "text": "给我一个好球！",
+            "expression": "grasp",
+            "char_ms": 45,
+            "pause_after_ms": 0,
+            "emphasis": []
+          }
+        ]
       },
       "aware": {
         "node_id": "aware",
         "speaker": "boss",
         "text": "不管你以为你知道什么，我希望你从现在开始全部忘掉，一切以我说的为准。\n\n这伙黑客号称“光明社”，长期盗取宋王星集团的系统机密，一直以来我都怀疑内部员工里有人在协助他们，你的任务就是要找到这些反公司分子，然后狠狠把他们踢出去。\n\n今天从这个叫吕师的员工开始，具体档案你一会儿看邮箱。\n\n打起精神来，给我一个好球！",
-        "options": []
+        "options": [],
+        "beats": [
+          {
+            "text": "不管你以为你知道什么，我希望你从现在开始全部忘掉，一切以",
+            "expression": "angry",
+            "char_ms": 45,
+            "pause_after_ms": 0,
+            "emphasis": []
+          },
+          {
+            "text": "我",
+            "expression": "angry",
+            "char_ms": 45,
+            "pause_after_ms": 0,
+            "emphasis": [
+              "我"
+            ]
+          },
+          {
+            "text": "说的为准。",
+            "expression": "angry",
+            "char_ms": 45,
+            "pause_after_ms": 450,
+            "emphasis": []
+          },
+          {
+            "text": "\n\n这伙黑客号称“光明社”，长期盗取宋王星集团的系统机密，一直以来我都怀疑内部员工里有人在协助他们，",
+            "expression": "gaze",
+            "char_ms": 45,
+            "pause_after_ms": 0,
+            "emphasis": [
+              "光明社",
+              "宋王星集团"
+            ]
+          },
+          {
+            "text": "你的任务就是要找到这些反公司分子，然后狠狠把他们踢出去。",
+            "expression": "grasp",
+            "char_ms": 45,
+            "pause_after_ms": 450,
+            "emphasis": []
+          },
+          {
+            "text": "\n\n今天从这个叫吕师的员工开始，具体档案你一会儿看邮箱。",
+            "expression": "gaze",
+            "char_ms": 45,
+            "pause_after_ms": 450,
+            "emphasis": [
+              "吕师",
+              "邮箱"
+            ]
+          },
+          {
+            "text": "\n\n打起精神来，",
+            "expression": "grasp",
+            "char_ms": 45,
+            "pause_after_ms": 650,
+            "emphasis": []
+          },
+          {
+            "text": "给我一个好球！",
+            "expression": "grasp",
+            "char_ms": 45,
+            "pause_after_ms": 0,
+            "emphasis": []
+          }
+        ]
       }
     }
   }

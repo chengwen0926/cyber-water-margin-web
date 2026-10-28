@@ -39,4 +39,8 @@ def snapshot(save: PlayerSave, contact_id: str, script: ChatScript) -> ChatSessi
         messages = [*previous, ChatMessage(speaker=node.speaker, text=node.text)]
     if not messages:
         messages = [ChatMessage(speaker=node.speaker, text=node.text)]
+    # Hydrate authored performance cues for old transcripts without rewriting saves.
+    authored = {(n.speaker, n.text): n.beats for n in script.nodes.values() if n.beats}
+    messages = [m.model_copy(update={"beats": authored[(m.speaker, m.text)]})
+                if (m.speaker, m.text) in authored else m for m in messages]
     return ChatSession(contact_id=contact_id, script_id=script.script_id, current_node=node, messages=messages)

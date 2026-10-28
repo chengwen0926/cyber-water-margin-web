@@ -58,10 +58,20 @@ export type DialogueOption = {
   next_node_id: string;
 };
 
+export type BossExpression = 'smile' | 'recollect' | 'animated' | 'gaze' | 'grasp' | 'angry';
+export type DialogueBeat = {
+  text: string;
+  expression: BossExpression;
+  char_ms: number;
+  pause_after_ms: number;
+  emphasis: string[];
+};
+
 export type DialogueNode = {
   node_id: string;
   speaker: 'boss' | 'npc' | 'player';
   text: string;
+  beats?: DialogueBeat[];
   options: DialogueOption[];
   reveals_clue: string | null;
   reveals_directive: string | null;
@@ -205,7 +215,7 @@ export type IncomingCallEvent = {
   script_id: string;
 };
 
-export type ChatMessage = { speaker: 'boss' | 'npc' | 'player'; text: string };
+export type ChatMessage = { speaker: 'boss' | 'npc' | 'player'; text: string; beats?: DialogueBeat[] };
 export type ChatSession = {
   contact_id: string;
   script_id: string;
